@@ -263,8 +263,8 @@ if(tot_codeur_G<=-20000)
 					//////////////////////////////////////////////////////////////////////////
 					// Trapèze vitesse avance 
 					
-					Vitesse_C_U = calculTrapez(AVANCE,Vitesse_C_U, 0/*V_Min*/,	70.0/*V_Max mm/10ms */,		distance_restante,	10.0/*A_Desc mm/(10ms)²*/,		10.0/*A_Acc mm/(10ms)²*/,	&positionnement_precis_U);
-					Vitesse_C_T = calculTrapez(TOURNE,Vitesse_C_T, 0/*V_Min*/,	M_PI/*V_Max rad/10ms*/,		angle_restant,		20.0/*A_Desc rad/(10ms)²*/,		20.0/*A_Acc mm/(10ms)² */,	&positionnement_precis_T);
+					Vitesse_C_U = calculTrapez(AVANCE,	Vitesse_C_U,	20/*V_Min*/,	70.0/*V_Max mm/10ms */,		distance_restante,	10.0/*A_Desc mm/(10ms)²*/,		10.0/*A_Acc mm/(10ms)²*/,	&positionnement_precis_U);
+					Vitesse_C_T = calculTrapez(TOURNE,	Vitesse_C_T,	0/*V_Min*/,	M_PI/*V_Max rad/10ms*/,		angle_restant,		20.0/*A_Desc rad/(10ms)²*/,		20.0/*A_Acc mm/(10ms)² */,	&positionnement_precis_T);
 					
 					//////////////////////////////////////////////////////////////////////////
 					// Asservi PID
@@ -288,7 +288,7 @@ if(tot_codeur_G<=-20000)
 					//////////////////////////////////////////////////////////////////////////
 					// vitesse de négociation du changement de cap
 					
-					V_Min=Calcul_ralentissement(Vitesse_C_U,30.0,position); // ATTETION la valeur V_Min en sortie est non signé
+					V_Min=Calcul_ralentissement(Vitesse_C_U,	30.0,	position); // ATTETION la valeur V_Min en sortie est non signé
 					
 					//////////////////////////////////////////////////////////////////////////
 					// Calcule des distantes restantes à parcourir	
@@ -298,8 +298,8 @@ if(tot_codeur_G<=-20000)
 					//////////////////////////////////////////////////////////////////////////
 					// Trapèze vitesse avance 
 					
-					Vitesse_C_U = calculTrapez(AVANCE,	Vitesse_C_U,	0/*V_Min*/,		5/*V_Max mm/10ms */,		distance_restante,	2.0/*A_Desc mm/(10ms)² */,	2.0/*A_Acc mm/(10ms)² */,	&positionnement_precis_U);
-					Vitesse_C_T = calculTrapez(TOURNE,	Vitesse_C_T,	0/*V_Min*/,		0.115/*V_Max rad/10ms */,	angle_restant,		3.0/*A_Desc rad/(10ms)² */, 3.0/*A_Acc rad/(10ms)² */,	&positionnement_precis_T);
+					Vitesse_C_U = calculTrapez(AVANCE,	Vitesse_C_U,	V_Min/*V_Min*/,		5/*V_Max mm/10ms */,		distance_restante,	2.0/*A_Desc mm/(10ms)² */,	2.0/*A_Acc mm/(10ms)² */,	&positionnement_precis_U);
+					Vitesse_C_T = calculTrapez(TOURNE,	Vitesse_C_T,	0/*V_Min*/,			0.115/*V_Max rad/10ms */,	angle_restant,		3.0/*A_Desc rad/(10ms)² */, 3.0/*A_Acc rad/(10ms)² */,	&positionnement_precis_T);
 					
 					//////////////////////////////////////////////////////////////////////////
 					// Asservi PID

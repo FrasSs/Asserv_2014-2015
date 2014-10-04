@@ -41,7 +41,7 @@ double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double
 	double *Dist_old;
 	double *D_Desc_old;
 	double *D_Desc;
-	double *Var;
+	double *Time;
 	int *sens; // avance,recule,stop en fct de Dist
 	int *etape; // Etape 1 à 3 : Accélère, même vitesse et descélération
 	
@@ -80,7 +80,7 @@ double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double
 	if (action==TOURNE) // pour la fct avec l'arg TOURNE
 	{
 		D_Desc=&D_Desc_T;
-		Var=&Var_T;
+		Time=&Var_T;
 		etape =&etape_T;
 		sens=&sens_T;
 		Vitesse_old=&Vitesse_old_T;
@@ -92,7 +92,7 @@ double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double
 	if (action==AVANCE) // pour la fct avec l'arg AVANCE
 	{
 		D_Desc=&D_Desc_U;
-		Var=&Var_U;
+		Time=&Var_U;
 		etape =&etape_U;
 		sens=&sens_U;
 		Vitesse_old=&Vitesse_old_U;
@@ -103,7 +103,7 @@ double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double
 	if (action==AVANCE_Free) // pour la fct avec l'arg AVANCE_Free
 	{
 		D_Desc=&D_Desc_UF;
-		Var=&Var_UF;
+		Time=&Var_UF;
 		etape =&etape_UF;
 		sens=&sens_UF;
 		Vitesse_old=&Vitesse_old_UF;
@@ -153,12 +153,14 @@ double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double
 		}
 	
 		V_Min*=(*sens); // Application du changement (rend signé la valeur de V_Min)
+		A_Desc*=(*sens);
+		A_Acc*=(*sens);
 	
 		//////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////
 	
-		while(rebouclage)
+		while(rebouclage && (*sens!=0))
 		{
 			rebouclage=0; // éviter la boucle infini et permettre de faire un rebouclage une fois les calcules de 1 effectué,ou la condition de 3 vérifié
 
@@ -171,53 +173,42 @@ double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double
 					//////////////////////////////////////////////////////////////////////////
 					//Calcule de la distance de descélération/////////////////////////////////
 					//////////////////////////////////////////////////////////////////////////
-					// en AVANCE
-					if (Vitesse>=V_Min)
+
+					if (fabs(Vitesse)>fabs(V_Min))
 					{
 						*D_Desc_old=*D_Desc; // sauvegarde de l'ancienne distance de descélération
-						*Var=-((fabs(V_Min))-(fabs(Vitesse+(A_Acc))))/(A_Desc); // variable pour le calcule de D_Desc
-						*D_Desc=((-A_Desc/2)*(*Var)*(*Var))+((fabs(Vitesse+(A_Acc)))*(*Var)); // mesure de la distance de déscélération nécessaire
+						
+						*Time=-(V_Min-(Vitesse+A_Acc))/(A_Desc); // variable pour le calcule de D_Desc
+						*D_Desc=(((-A_Desc)/2.0)*(*Time)*(*Time))+((Vitesse+A_Acc)*(*Time)); // mesure de la distance de déscélération nécessaire
 					}
 					else
 					{
-						if (!(Vitesse<=V_Min))
-						{
-							*D_Desc=0;
-						}
-					}
-					
-					// en RECULE
-					if (Vitesse<=V_Min)
-					{
 						*D_Desc_old=*D_Desc; // sauvegarde de l'ancienne distance de descélération
-						*Var=-((fabs(V_Min))-(fabs(Vitesse+(*sens*A_Acc))))/(A_Desc); // variable pour le calcule de D_Desc
-						*D_Desc=((-A_Desc/2)*(*Var)*(*Var))+((fabs(Vitesse+(*sens*A_Acc)))*(*Var)); // mesure de la distance de déscélération nécessaire
+						
+						
+						*D_Desc=(Vitesse+A_Acc); // mesure de la distance parcouru à la vitesse actuelle en un cycle
 					}
-					else
-					{
-						if (!(Vitesse>=V_Min))
-						{
-							*D_Desc=0;
-						}
-					}
-					//////////////////////////////////////////////////////////////////////////
-					
+				
+						
 						
 					if( (fabs(Dist)>=*D_Desc) && (fabs(Vitesse)<V_Max) ) // si on ne dépasse pas VMAx ou si on as encore assès de place pour ralentir une fois appliqué
 					{
-						Vitesse+=((*sens)*A_Acc);	// calcule accélération
+						Vitesse+=A_Acc;	// calcule accélération
 					}
 					else
 					{
 						(*etape)++; // passage à l'etape suivante
 						rebouclage=1; // reboucler directement par le While(recbouclage) de cette fct (ne passe donc pas par le main)
-					
+							
 						if(fabs(Vitesse)<V_Max) // si la vitesse max n'a pas été atteinte
 						{
 							*D_Desc=*D_Desc_old; // recuperation de l'ancienne Distance de descélération car elle à été calculé pour le moment n+1 alors que l'on est à n
 						}
-					}		
-				
+					}
+					
+					
+					//////////////////////////////////////////////////////////////////////////
+					
 					break;
 				}
 			
@@ -276,7 +267,7 @@ double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double
 		// reset complet des variables statices
 		*etape=1; // Inicialisation (mettre la variable pointé à un pour recommencer le sycle au démarage)
 		*D_Desc=0;
-		*Var=0;
+		*Time=0;
 		*sens=0;
 		*Vitesse_old=0;
 		*Dist_old=0;

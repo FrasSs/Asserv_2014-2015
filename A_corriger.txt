@@ -3,17 +3,12 @@
 Problème : tourne pas de manière optimisé
 
 A revoir : 	Calcule Trapeze
-		Odometrie (cumule dans un double)
-		Calcule distance restante
+		Calcule distance restante // voire les constantes de critère
 
 
 A faire cette année 2014-2015
-	
-Odométrie.c // Voir indication commenté
-
 	Régler les PI
 	Parfaire l'action Avance Free
-	Voir pour le déplacement par déplacementdu CIR
 	Detection blocage : 	- logicielle (condition cercle ...)
 				- matérielle (sonde courent)
 				- Detection blocage > envoi info par I2C
@@ -21,3 +16,8 @@ mettre à jour le position par I2C
 
 
 	Faire un bon couple vitesse de descélération et précision d'arrivé
+
+
+Idéee :
+	Voir pour le déplacement par déplacementdu CIR
+	recalage auto : recule puis avance pour corriger l'erreur de position
