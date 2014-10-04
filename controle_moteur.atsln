@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Atmel Studio Solution File, Format Version 11.00
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "controle_moteur", "src_asserv\controle_moteur.cproj", "{A0EFF7CE-8DC8-4773-B946-67E2AA498404}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		asservDamien|AVR = asservDamien|AVR
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+		toggle_led|AVR = toggle_led|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A0EFF7CE-8DC8-4773-B946-67E2AA498404}.asservDamien|AVR.ActiveCfg = asservDamien|AVR
+		{A0EFF7CE-8DC8-4773-B946-67E2AA498404}.asservDamien|AVR.Build.0 = asservDamien|AVR
+		{A0EFF7CE-8DC8-4773-B946-67E2AA498404}.Debug|AVR.ActiveCfg = Debug|AVR
+		{A0EFF7CE-8DC8-4773-B946-67E2AA498404}.Debug|AVR.Build.0 = Debug|AVR
+		{A0EFF7CE-8DC8-4773-B946-67E2AA498404}.Release|AVR.ActiveCfg = Release|AVR
+		{A0EFF7CE-8DC8-4773-B946-67E2AA498404}.Release|AVR.Build.0 = Release|AVR
+		{A0EFF7CE-8DC8-4773-B946-67E2AA498404}.toggle_led|AVR.ActiveCfg = toggle_led|AVR
+		{A0EFF7CE-8DC8-4773-B946-67E2AA498404}.toggle_led|AVR.Build.0 = toggle_led|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
