@@ -12,8 +12,7 @@
 Timothee Marescot
 */
 
-#include "../hardware/leds.h" // Pour le debug
-#include "struct_Commande.h"
+#include "config.h"
 
 double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double Dist, double A_Desc,double A_Acc,int *Arrive);
 //						|||			|||				|||			|||				|||				|||			|||			|||	Distance utiliser en fin du Trapez pour la précision du positionnement

@@ -1,10 +1,3 @@
-/*
- * struct_Commande.h
- *
- * Created: 09/04/2014 18:30:37
- *  Author: Frass-BroSok
- */ 
-
 
 #ifndef STRUCT_COMMANDE_H_
 #define STRUCT_COMMANDE_H_

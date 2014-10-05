@@ -1,26 +1,14 @@
-/*
- * main.c
- *
- * Created: 18/09/2012 16:26:30
- *  Author: Manuel
- *		Note le minimum pour faire tourné des moteurs.FONCTIONNE
- */ 
 
-#define F_CPU 32000000UL
+#if 1
 
-#include <util/delay.h>
-#include <stdint.h>
-#include <math.h>
 #include "./include/config.h"
-#include "./hardware/avr_compiler.h"
+
 
 //////////////////////////////////////////////////////////////////////////
 // I2C ///////////////////////////////////////////////////////////////////
 
 extern uint8_t I2CNewOrderFlag;
 Commande I2CNewOrder;
-
-extern int Com_i2c;
 
 //////////////////////////////////////////////////////////////////////////
 // Constante de temps ////////////////////////////////////////////////////
@@ -41,13 +29,11 @@ double distance_U = 0.0;	// Vitesse Réelle = vitesse_U*/10.0	(donne des m/s) car
 //////////////////////////////////////////////////////////////////////////
 // Ordres ////////////////////////////////////////////////////////////////
 
-#define STACK_SIZE 4 // taille de la pile utilisé
 Commande Ordre1={STOP,0,0,0};
 Commande Ordre2={STOP,0,0,0};
 Commande Ordre3={STOP,0,0,0};
 Commande Ordre4={STOP,0,0,0};
-Commande End_ordre={0,0,0,0};
-Commande* Tab_ordre[] = {&Ordre1 , &Ordre2, &Ordre3, &Ordre4,&End_ordre}; // Pile d'ordre
+Commande* Tab_ordre[] = {&Ordre1 , &Ordre2, &Ordre3, &Ordre4}; // Pile d'ordre
 Commande Ordre_actuel;	// Ordre en cours
 Commande Ordre_suivant; // Ordre suivant
 
@@ -83,11 +69,8 @@ int BugBloquage=0;
 double moteur_G = 0.0;
 double moteur_D = 0.0;
 
-//////////////////////////////////////////////////////////////////////////
-//Test
-#define TEST_CODEUSES 0 
+#endif
 
-//////////////////////////////////////////////////////////////////////////
 
 
 int main(void)
@@ -97,125 +80,6 @@ int main(void)
 	
 	init();
 	
-	//////////////////////////////////////////////////////////////////////////
-	// Test et debuging //////////////////////////////////////////////////////
-
-	//Test en brute force control robot par l'asserv
-	
-	#if TEST_CODEUSES== 2
-	/*int tot_codeur_G = 0;
-	int tot_codeur_D = 0;
-	
-	int tot_codeur_G_2 = 0;
-	int tot_codeur_D_2 = 0;*/
-	
-//Carré pour test AVANCE /////////////////////////////////////////////////
-
-	Ordre1.Type = AVANCE;
-	Ordre1.X = 0.0;
-	Ordre1.Y = 0.0;//500.0;
-	Ordre1.Theta = -M_PI_2;
-		
-	Ordre2.Type = AVANCE;
-	Ordre2.X = 300.0;
-	Ordre2.Y = 500.0;
-	Ordre2.Theta = -M_PI;
-		
-	Ordre3.Type = AVANCE;
-	Ordre3.X = 300.0;
-	Ordre3.Y = 0.0;
-	Ordre3.Theta = M_PI_2;
-		
-	Ordre4.Type = AVANCE;
-	Ordre4.X = 0.0;
-	Ordre4.Y = 0.0;
-	Ordre4.Theta = 0;
-	
-	new_etat=4;
-	nb_ordre=4;
-	
-//Arc de cerlce pour tester AVANCE_Free////////////////////////////////////
-
-	/*Ordre1.Type = AVANCE_Free;
-	Ordre1.X = 50.0;
-	Ordre1.Y = 150.0;
-	Ordre1.Theta = -M_PI_2;
-	
-	Ordre2.Type = AVANCE_Free;
-	Ordre2.X = 225.0;
-	Ordre2.Y = 330.0;
-	Ordre2.Theta = -M_PI;
-	
-	Ordre3.Type = AVANCE_Free;
-	Ordre3.X = 400.0;
-	Ordre3.Y = 400.0;
-	Ordre3.Theta = M_PI_2;
-	
-	Ordre4.Type = AVANCE;
-	Ordre4.X = 0.0;
-	Ordre4.Y = 0.0;
-	Ordre4.Theta = 0;
-	
-///Autre /////////////////////////////////////////////////////////////////
-	
-	
-	Ordre1.Type = AVANCE;
-	Ordre1.X = 0.0;
-	Ordre1.Y = 600.0;
-	Ordre1.Theta = -M_PI_2;
-	
-	Ordre2.Type = AVANCE;
-	Ordre2.X = -900.0;
-	Ordre2.Y = 600.0;
-	Ordre2.Theta = -M_PI_2;
-	
-	Ordre3.Type = AVANCE;
-	Ordre3.X = -1500.0;
-	Ordre3.Y = 600.0;
-	Ordre3.Theta = 0;
-	
-	Ordre4.Type = AVANCE;
-	Ordre4.X = -1500.0;
-	Ordre4.Y = 0.0;
-	Ordre4.Theta = 0;
-	
-	new_etat=4;
-		*/
-	#endif	
-
-
-	//Relevé des roues codeuses
-
-	#if TEST_CODEUSES==1
-tot_codeur_D=tot_codeur_D+Sens_codeur_D*(codeur_d - 10000);
-tot_codeur_G=tot_codeur_G+Sens_codeur_G*(codeur_g - 10000);
-			
-			
-if(tot_codeur_D>=20000)
-{
-	tot_codeur_D-=20000;
-	tot_codeur_D_2++;
-}
-if(tot_codeur_D<=-20000)
-{
-	tot_codeur_D+=20000;
-	tot_codeur_D_2--;
-}
-			
-			
-if(tot_codeur_G>=20000)
-{
-	tot_codeur_G-=20000;
-	tot_codeur_G_2++;
-}
-if(tot_codeur_G<=-20000)
-{
-	tot_codeur_G+=20000;
-
-	tot_codeur_G_2--;
-}
-	#endif
-
 	//////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////
 
@@ -228,7 +92,6 @@ if(tot_codeur_G<=-20000)
 			
 			Init_codeurs(&codeur_d,&codeur_g); // initialisation codeuses
 			
-			
 			//////////////////////////////////////////////////////////////////////////
 			// ODOMETRIE /////////////////////////////////////////////////////////////
 			
@@ -237,10 +100,10 @@ if(tot_codeur_G<=-20000)
 			//////////////////////////////////////////////////////////////////////////
 			// I2C ///////////////////////////////////////////////////////////////////
 			
-			if (I2CNewOrderFlag)  // un nouvel ordre recu sur le bus I2C
+			if ((I2CNewOrderFlag==1) && (nb_ordre<STACK_SIZE))  // un nouvel ordre recu sur le bus I2C
 			{
 				// Mise à jour du pointeur de la pile d'ordre pour pointé sur le dernier ordre reçu
-				Actualisation_new_Ordre(STACK_SIZE); 
+				Pile(); 
 				
 				I2CNewOrderFlag = 0;
 			}
@@ -288,7 +151,7 @@ if(tot_codeur_G<=-20000)
 					//////////////////////////////////////////////////////////////////////////
 					// vitesse de négociation du changement de cap
 					
-					V_Min=Calcul_ralentissement(Vitesse_C_U,	30.0,	position); // ATTETION la valeur V_Min en sortie est non signé
+					V_Min=Calcul_ralentissement(30.0,	position); // ATTETION la valeur V_Min en sortie est non signé
 					
 					//////////////////////////////////////////////////////////////////////////
 					// Calcule des distantes restantes à parcourir	
@@ -391,7 +254,7 @@ if(tot_codeur_G<=-20000)
 		//////////////////////////////////////////////////////////////////////////
 		// fonction de déroulement de la pile + mise à jour les commandes et nb_ordre
 		
-		fct_Ordre_suivant(&positionnement_precis_U,&positionnement_precis_T,STACK_SIZE,STOP);
+		fct_Ordre_suivant(&positionnement_precis_U,&positionnement_precis_T);
 		
 		//////////////////////////////////////////////////////////////////////////
 	} // end while(1)

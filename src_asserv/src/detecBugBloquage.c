@@ -13,8 +13,10 @@ extern double PID_V_T;
 extern double PID_V_U;
 extern int positionnement_precis_U;
 extern int positionnement_precis_T;
-	
 extern int BugBloquage;
+extern Commande Ordre_actuel;
+extern double moteur_G; // variable Commande moteur
+extern double moteur_D; // variable Commande moteur
 	
 //////////////////////////////////////////////////////////////////////////
 //detectBugBloquage : fonction qui à pour but de capter les bug///////////
@@ -73,15 +75,15 @@ void detecBugBloquage()
 	}
 	
 	
-	if (capteur_bug_U>20)
-	{
-		BugBloquage=1;
-	}
-	else
-	{
-		BugBloquage=0;
-	}
-	
+// 	if (capteur_bug_U>20)
+// 	{
+// 		BugBloquage=1;
+// 	}
+// 	else
+// 	{
+// 		BugBloquage=0;
+// 	}
+
 	//////////////////////////////////////////////////////////////////////////
 	// Bug Theta
 	
@@ -105,14 +107,14 @@ void detecBugBloquage()
 	
 	// Bocage
 
-	if (capteur_bug_Theta>50)
-	{
-		BugBloquage=1;
-	}
-	else
-	{
-		BugBloquage=0;
-	}
+// 	if (capteur_bug_Theta>50)
+// 	{
+// 		BugBloquage=1;
+// 	}
+// 	else
+// 	{
+// 		BugBloquage=0;
+// 	}
 	
 	//////////////////////////////////////////////////////////////////////////
 
@@ -133,7 +135,7 @@ void detecBugBloquage()
 		moteur_D=0;
 		moteur_G=0;
 		
-		fct_STOP_F(STOP);
+		fct_STOP_F();
 		position.Type=BLOQUE;
 		Ordre_actuel.Type=BLOQUE; // forcer le blocage
 	}

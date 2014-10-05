@@ -1,23 +1,8 @@
-﻿/*
- * CFile1.c
- *
- * Created: 27/09/2012 19:33:14
- *  Author : Léon
- *	Corrigé : François
- */ 
-
-
+﻿
 #include <math.h>
 
 #include "../include/Calcule_distance.h"
-#include "../include/config.h"
 
-/*
- * gestionTrajectoire.c
- *
- *  Created on: 23 sept. 2012
- *      Author: Manuel
- */
 
 void Calcule_deplacement(int action)
 {
@@ -37,10 +22,10 @@ void Calcule_deplacement(int action)
 	
 	distance_restante = sqrt((X_Bp)*(X_Bp) + (Y_Bp)*(Y_Bp) );
 	
-	Theta_B=-fmod(atan2(X_Bp,Y_Bp),2*M_PI); // calcule de l'angle pour la position demandé sur le repère fixe au robot(mais non orienté, parallèle au repère de base du terrain).
+	Theta_B=atan2(Y_Bp,X_Bp);	// calcule de l'angle pour la position demandé sur le repère fixe au robot(mais non orienté, parallèle au repère de base du terrain).
 	Theta_B=Modulo_Pi(Theta_B);
 		
-	Theta_Bp=fmod(Theta_B-position.Theta,2*M_PI); // calcule de l'angle  avec l'orientation réel du robot
+	Theta_Bp=Theta_B-position.Theta;	// calcule de l'angle  avec l'orientation réel du robot
 	Theta_Bp=Modulo_Pi(Theta_Bp);
 	
 	Y_Bpp=distance_restante*cos(Theta_Bp); // coordonné du point arrivé sur le repère fixe au robot
@@ -67,12 +52,13 @@ void Calcule_deplacement(int action)
 			// Phase d'approche 2 : se caler sur l'angle commandé par I2C
 			if (distance_restante_reel<20) // phase d'aproche final (positionnement plus précis en U et mise en position du Theta ordonné)
 			{
-				angle_restant = fmod(Ordre_actuel.Theta-position.Theta,2.0*M_PI); // angle à parcourir pour arriver à l'angle commendé sur le repère fixe au robot
+				angle_restant=Ordre_actuel.Theta-position.Theta;// angle à parcourir pour arriver à l'angle commendé sur le repère fixe au robot
+				
 			}
 			// Phase d'approche 1 : se caler son cap sur le point demandé
 			else
 			{
-				angle_restant = fmod(Theta_Bp,2.0*M_PI); // angle à parcourir pour arriver à l'angle désiré sur le repère fixe au robot
+				angle_restant=Theta_Bp;// angle à parcourir pour arriver à l'angle désiré sur le repère fixe au robot
 			}
 			
 			//////////////////////////////////////////////////////////////////////////
@@ -172,12 +158,14 @@ void Calcule_deplacement(int action)
 		{
 			//////////////////////////////////////////////////////////////////////////
 			// Assignation à l'angle ordonné par l'I2C
-			angle_restant = fmod(Ordre_actuel.Theta-position.Theta,2.0*M_PI); // angle à parcourir pour arriver à l'angle désiré sur le repère fixe au robot
+			
+			angle_restant = Ordre_actuel.Theta-position.Theta; // angle à parcourir pour arriver à l'angle désiré sur le repère fixe au robot
 			
 			
 			//////////////////////////////////////////////////////////////////////////
 			//angle optimale en passant les angles sur -PI et PI//////////////////////
 			// modulo
+			
 			angle_restant=Modulo_Pi(angle_restant);// application de la correction
 			
 			//////////////////////////////////////////////////////////////////////////

@@ -1,23 +1,5 @@
-﻿/*
- * CFile1.c
- *
- * Created: 27/09/2012 19:33:14
- *  Author : Léon
- *	Corrigé : François
- */ 
-
-
-#include <math.h>
-
+﻿
 #include "../include/Lecture_trapeze.h"
-#include "../include/config.h"
-
-/*
- * gestionTrajectoire.c
- *
- *  Created on: 23 sept. 2012
- *      Author: Manuel
- */
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -241,7 +223,18 @@ double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double
 				// descélération 	
 				case 3 :  
 				{
-					Vitesse=((fabs(Dist)/(*Dist_old))*((*Vitesse_old-A_Desc)-(*sens*7)-V_Min))+(*sens*7)+V_Min;
+					
+					
+					if (Vitesse>15)
+					{
+						Vitesse=((fabs(Dist)/(*Dist_old))*(*Vitesse_old-A_Desc-V_Min))+V_Min;
+					}
+					else
+					{
+						Vitesse=15;
+					}
+					
+					
 					*etape=1;
 					
 					break;
@@ -269,7 +262,7 @@ double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double
 		*D_Desc=0;
 		*Time=0;
 		*sens=0;
-		*Vitesse_old=0;
+		*Vitesse_old=Vitesse;
 		*Dist_old=0;
 		*D_Desc_old=0;
 		//////////////////////////////////////////////////////////////////////////

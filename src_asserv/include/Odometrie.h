@@ -2,7 +2,7 @@
 #ifndef ODO_H_
 #define ODO_H_
 
-#include "struct_Commande.h"
+#include "config.h"
 
 void fct_odometrie(); // fonction visant à mettre à jour la position du robot et la calcule 
 

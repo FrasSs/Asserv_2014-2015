@@ -1,36 +1,26 @@
-﻿/*
- * config.h
- *
- * Created: 29/09/2012 17:08:35
- *  Author: Léon
- */ 
+﻿
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
+#define F_CPU 32000000UL
+
+#include "../hardware/avr_compiler.h"
 #include "../hardware/drivers/port_driver.h"
 #include "../hardware/drivers/clksys_driver.h"
 #include "../hardware/drivers/pmic_driver.h"
 #include "../hardware/codeur.h"
 #include "../hardware/drivers/TC_driver.h"
-#include "math.h"
+
+#include <util/delay.h>
+#include <stdint.h>
+#include <math.h>
 
 #include "../hardware/pwm.h"
 #include "../hardware/leds.h"
 #include "../hardware/i2c.h"
 
-#include "Lecture_trapeze.h"
-#include "Calcule_distance.h"
+#include "struct_Commande.h"
 
-#include "Odometrie.h"
-
-#include "Ordres.h"
-
-#include "traitementI2C.h"
-#include "detecBugBloquage.h"
-#include "PI_Asservissement.h"
-#include "Ralentissement_free.h"
-#include "Nombre_ordre_enregistre.h"
-#include "Modulo_pi.h"
 
 //////////////////////////////////////////////////////////////////////////
 //Gros Robot//////////////////////////////////////////////////////////////
@@ -82,7 +72,7 @@
 #define cablage_mot_G 1
 */
 //////////////////////////////////////////////////////////////////////////
-
+// Ordre
 
 // Ce sont les différents états du robot
 #define STOP_F		0x20
@@ -97,6 +87,18 @@
 
 #define ORDRE_RECU_MAIS_PAS_ENCORE_TRAITE	20 //pour i2c
 
+
+//////////////////////////////////////////////////////////////////////////
+//Test
+
+#define TEST_CODEUSES 0
+
+//////////////////////////////////////////////////////////////////////////
+// Pile
+
+#define STACK_SIZE 4 // taille de la pile utilisé
+
+//////////////////////////////////////////////////////////////////////////
 
 int init(void);
 

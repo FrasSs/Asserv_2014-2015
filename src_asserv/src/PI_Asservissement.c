@@ -8,8 +8,8 @@
 
 double fct_PI(int action,double Ki, double seuil_I, double Kp,double Erreur_E,double Te)
 {
-	static double SumErreurTourne = 0;
-	static double SumErreurAvance = 0;
+	static double SumErreurTourne = 0.0;
+	static double SumErreurAvance = 0.0;
 	
 	double * SumErreur;
 	
@@ -23,7 +23,9 @@ double fct_PI(int action,double Ki, double seuil_I, double Kp,double Erreur_E,do
 		SumErreur = &SumErreurAvance;
 	}
 	
+	
 	*SumErreur += Erreur_E;
+	
 	if(*SumErreur > seuil_I)
 	{
 		*SumErreur = seuil_I;

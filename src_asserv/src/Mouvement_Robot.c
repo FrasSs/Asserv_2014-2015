@@ -1,8 +1,8 @@
 
 #include "../include/Mouvement_Robot.h"
-#include "math.h"
-extern int nb_ordre;
 
+extern double moteur_D;
+extern double moteur_G;
 
 int Mouvement_robot(void)
 {

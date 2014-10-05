@@ -1,10 +1,4 @@
 
-//*****************************************************************************
-// PIC_Asser_Moteur
-// traitementI2C.h
-// dsPIC 30F
-// V.MATOUILLOT 26/01/08
-//*****************************************************************************
 #include <math.h>
 #include "../include/traitementI2C.h"
 #include "../hardware/i2c.h"
@@ -14,26 +8,18 @@
 
 
 #include "../hardware/i2c.h"
+
 //== PUBLIC VARIABLES =========================================================
 uint8_t I2CNewOrderFlag = 0;
-uint8_t I2CNewOrderAkwnoledged = 1;
+
 extern Commande I2CNewOrder;
 
 extern Commande position;
-extern int nb_ordre;
 
-// BUFFER ( 20 octets ) : Reception
-unsigned char msg[20];
-unsigned char* pmsg = & msg[0];
-unsigned char msg_size;
+extern Commande Ordre_actuel;
 
 // BUFFER ( 20 octets ) : Emission
 unsigned char buffer_OUT[20];
-unsigned char buffer_OUT_INDEX;
-int buffer_OUT_size;
-
-unsigned char ERREURI2C=0;
-unsigned int  seuil_blockage=0;
 
 void i2cCallBack(uint8_t cmd, uint8_t dataRx[], uint8_t size)
 {
@@ -42,7 +28,6 @@ void i2cCallBack(uint8_t cmd, uint8_t dataRx[], uint8_t size)
 
 void traitementI2C(unsigned char * msg,unsigned char size)
 {
-	int eff_ordre=0;
 	long temp;
 		
 	//////////////////////////////////////////////////////////////////////////
@@ -109,7 +94,9 @@ void traitementI2C(unsigned char * msg,unsigned char size)
 			I2CNewOrderFlag = 1;
 			break;
 		}
-			
+
+//////////////////////////////////////////////////////////////////////////
+// !!!!! Bugé ////////////////////////////////////////////////////////////
 		case POSITION_W:
 		{
 			temp = ((long)((unsigned char)msg[4]))<<24;
@@ -132,14 +119,9 @@ void traitementI2C(unsigned char * msg,unsigned char size)
 			temp += ((long)((unsigned char)msg[9]));
 			position.Theta=((double)temp / (double)10000);
 				
-			for(eff_ordre=0;Tab_ordre[eff_ordre+1]->Type==0;eff_ordre++) // effassement de tous les ordres
-			{
-				Tab_ordre[eff_ordre]->Type=STOP;
-				Tab_ordre[eff_ordre]->X=0;
-				Tab_ordre[eff_ordre]->Y=0;
-				Tab_ordre[eff_ordre]->Theta=0;
-			}
-			I2CNewOrderFlag = 1;
+// 			Erase_Pile();
+			 
+			I2CNewOrderFlag = 0;
 			break;
 		}
 			
