@@ -1,6 +1,6 @@
 ﻿
 #include "../include/Lecture_trapeze.h"
-
+#include <math.h>
 
 //////////////////////////////////////////////////////////////////////////
 // Trapèze Vitesse                      ///V_Max vitesse maximale/////////

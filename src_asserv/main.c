@@ -3,7 +3,6 @@
 
 #include "./include/config.h"
 
-
 //////////////////////////////////////////////////////////////////////////
 // I2C ///////////////////////////////////////////////////////////////////
 
@@ -39,7 +38,9 @@ Commande Ordre_suivant; // Ordre suivant
 
 uint8_t etat = 0;		// numéro de l'ordre en cour
 uint8_t new_etat = 0;	// numéro du dernier ordre reçu
-int nb_ordre;			// nombre d'ordre enregistré
+int nb_ordre=0;			// nombre d'ordre enregistré
+
+int demarrage=0;
 
 //////////////////////////////////////////////////////////////////////////
 // Autres ////////////////////////////////////////////////////////////////
@@ -81,6 +82,126 @@ int main(void)
 	init();
 	
 	//////////////////////////////////////////////////////////////////////////
+	// Test et debuging //////////////////////////////////////////////////////
+
+	//Test en brute force control robot par l'asserv
+	
+	#if TEST_CODEUSES== 2
+		/*int tot_codeur_G = 0;
+		int tot_codeur_D = 0;
+	
+		int tot_codeur_G_2 = 0;
+		int tot_codeur_D_2 = 0;*/
+	
+		//Carré pour test AVANCE /////////////////////////////////////////////////
+
+		Ordre1.Type = AVANCE;
+		Ordre1.X = 0.0;
+		Ordre1.Y = 0.0;//500.0;
+		Ordre1.Theta = -M_PI_2;
+		
+		Ordre2.Type = AVANCE;
+		Ordre2.X = 300.0;
+		Ordre2.Y = 500.0;
+		Ordre2.Theta = -M_PI;
+		
+		Ordre3.Type = AVANCE;
+		Ordre3.X = 300.0;
+		Ordre3.Y = 0.0;
+		Ordre3.Theta = M_PI_2;
+		
+		Ordre4.Type = AVANCE;
+		Ordre4.X = 0.0;
+		Ordre4.Y = 0.0;
+		Ordre4.Theta = 0;
+		
+		nb_ordre=3;
+		new_etat=3;
+	
+		//Arc de cerlce pour tester AVANCE_Free////////////////////////////////////
+
+		/*Ordre1.Type = AVANCE_Free;
+		Ordre1.X = 50.0;
+		Ordre1.Y = 150.0;
+		Ordre1.Theta = -M_PI_2;
+	
+		Ordre2.Type = AVANCE_Free;
+		Ordre2.X = 225.0;
+		Ordre2.Y = 330.0;
+		Ordre2.Theta = -M_PI;
+	
+		Ordre3.Type = AVANCE_Free;
+		Ordre3.X = 400.0;
+		Ordre3.Y = 400.0;
+		Ordre3.Theta = M_PI_2;
+	
+		Ordre4.Type = AVANCE;
+		Ordre4.X = 0.0;
+		Ordre4.Y = 0.0;
+		Ordre4.Theta = 0;
+	
+		///Autre /////////////////////////////////////////////////////////////////
+	
+	
+		Ordre1.Type = AVANCE;
+		Ordre1.X = 0.0;
+		Ordre1.Y = 600.0;
+		Ordre1.Theta = -M_PI_2;
+	
+		Ordre2.Type = AVANCE;
+		Ordre2.X = -900.0;
+		Ordre2.Y = 600.0;
+		Ordre2.Theta = -M_PI_2;
+	
+		Ordre3.Type = AVANCE;
+		Ordre3.X = -1500.0;
+		Ordre3.Y = 600.0;
+		Ordre3.Theta = 0;
+	
+		Ordre4.Type = AVANCE;
+		Ordre4.X = -1500.0;
+		Ordre4.Y = 0.0;
+		Ordre4.Theta = 0;
+	
+		new_etat=4;
+		*/
+	#endif	
+
+
+	//Relevé des roues codeuses
+
+	#if TEST_CODEUSES==1
+		tot_codeur_D=tot_codeur_D+Sens_codeur_D*(codeur_d - 10000);
+		tot_codeur_G=tot_codeur_G+Sens_codeur_G*(codeur_g - 10000);
+			
+			
+		if(tot_codeur_D>=20000)
+		{
+			tot_codeur_D-=20000;
+			tot_codeur_D_2++;
+		}
+		if(tot_codeur_D<=-20000)
+		{
+			tot_codeur_D+=20000;
+			tot_codeur_D_2--;
+		}
+			
+			
+		if(tot_codeur_G>=20000)
+		{
+			tot_codeur_G-=20000;
+			tot_codeur_G_2++;
+		}
+		if(tot_codeur_G<=-20000)
+		{
+			tot_codeur_G+=20000;
+
+			tot_codeur_G_2--;
+		}
+	#endif
+		
+	
+	//////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////
 
 	while(1)
@@ -103,7 +224,13 @@ int main(void)
 			if ((I2CNewOrderFlag==1) && (nb_ordre<STACK_SIZE))  // un nouvel ordre recu sur le bus I2C
 			{
 				// Mise à jour du pointeur de la pile d'ordre pour pointé sur le dernier ordre reçu
-				Pile(); 
+				
+				Pile();
+				 
+				if (demarrage<5)
+				{
+					demarrage+=1;
+				}
 				
 				I2CNewOrderFlag = 0;
 			}
@@ -126,7 +253,7 @@ int main(void)
 					//////////////////////////////////////////////////////////////////////////
 					// Trapèze vitesse avance 
 					
-					Vitesse_C_U = calculTrapez(AVANCE,	Vitesse_C_U,	20/*V_Min*/,	70.0/*V_Max mm/10ms */,		distance_restante,	10.0/*A_Desc mm/(10ms)²*/,		10.0/*A_Acc mm/(10ms)²*/,	&positionnement_precis_U);
+					Vitesse_C_U = 0;//calculTrapez(AVANCE,	Vitesse_C_U,	20/*V_Min*/,	70.0/*V_Max mm/10ms */,		distance_restante,	10.0/*A_Desc mm/(10ms)²*/,		10.0/*A_Acc mm/(10ms)²*/,	&positionnement_precis_U);
 					Vitesse_C_T = calculTrapez(TOURNE,	Vitesse_C_T,	0/*V_Min*/,	M_PI/*V_Max rad/10ms*/,		angle_restant,		20.0/*A_Desc rad/(10ms)²*/,		20.0/*A_Acc mm/(10ms)² */,	&positionnement_precis_T);
 					
 					//////////////////////////////////////////////////////////////////////////
@@ -208,7 +335,7 @@ int main(void)
 					break;
 				}
 				
-// >>> STOP					
+// >>> STOP		
 				//Par I2C	
 				case STOP :
 				{
@@ -249,12 +376,12 @@ int main(void)
 		// Mise à jour des registres des pwm commandant les moteurs
 		
 		pwm_set(cablage_mot_D,Sens_mot_D*moteur_D); // attention moteur gauche inversé
-		pwm_set(cablage_mot_G,Sens_mot_G*moteur_G);// modifié pour le petit robot
+		pwm_set(cablage_mot_G,Sens_mot_G*moteur_G); // modifié pour le petit robot
 	
 		//////////////////////////////////////////////////////////////////////////
 		// fonction de déroulement de la pile + mise à jour les commandes et nb_ordre
 		
-		fct_Ordre_suivant(&positionnement_precis_U,&positionnement_precis_T);
+		fct_Ordre_suivant(&positionnement_precis_U,&positionnement_precis_T,&demarrage);
 		
 		//////////////////////////////////////////////////////////////////////////
 	} // end while(1)

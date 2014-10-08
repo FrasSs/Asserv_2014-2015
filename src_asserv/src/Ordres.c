@@ -38,19 +38,25 @@ void Actualisation_Ordre() // mise à jour de Ordre_actuel et Ordre_suivant
 //fct_Ordre_suivant : fonction permettant de passer à l'ordre suivant/////
 //////////////////////////////////////////////////////////////////////////
 
-void fct_Ordre_suivant(int *cond1,int *cond2)
+void fct_Ordre_suivant(int *cond1,int *cond2,int *demarrage)
 {
-	if ((*cond1==1)&&(*cond2==1)) // si fin d'état
+	if (((*cond1==1)&&(*cond2==1)) || (*demarrage==1)) // si fin d'état
 	{		
 		if (nb_ordre)// incrément jusqu'à attendre new_etat et bloque sur le dernier ordre
 		{
-			DePile(); // Dépilement de la Pile
-			
 			// mise à jour des ordres de la pile sur Ordre_actuel et Ordre_suivant
 			Actualisation_Ordre();
 			
+			DePile(); // Dépilement de la Pile
+			
 			*cond1=0;
 			*cond2=0;			
+		}
+		
+		
+		if (*demarrage<5)
+		{
+			*demarrage+=1;
 		}
 	}
 }

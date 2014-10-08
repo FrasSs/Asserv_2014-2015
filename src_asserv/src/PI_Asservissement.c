@@ -1,7 +1,7 @@
 ﻿
 
 #include "../include/PI_Asservissement.h"
-#include "../include/config.h"
+
 //////////////////////////////////////////////////////////////////////////
 // fct_PI : calcule de l'asservissement (Régulation PI) //////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -10,6 +10,8 @@ double fct_PI(int action,double Ki, double seuil_I, double Kp,double Erreur_E,do
 {
 	static double SumErreurTourne = 0.0;
 	static double SumErreurAvance = 0.0;
+	double Ptmp=0.0;
+	double Itmp=0.0;
 	
 	double * SumErreur;
 	
@@ -36,8 +38,8 @@ double fct_PI(int action,double Ki, double seuil_I, double Kp,double Erreur_E,do
 		*SumErreur = -seuil_I;
 	}
 	
-	double Ptmp = Kp*Erreur_E;
-	double Itmp = Ki*(*SumErreur);
+	Ptmp = Kp*Erreur_E;
+	Itmp = Ki*(*SumErreur);
 	
 	return Ptmp + Itmp;
 }

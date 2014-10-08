@@ -12,7 +12,8 @@ A revoir : 	Calcule Trapeze 		// revoir différence U et Theta
 		I2C 				// Position_W bugé
 						// écrir position et lire position --> à l'arret
 
-		
+		Pile				// Gestion du dépacement de capacité
+
 A faire cette année 2014-2015
 	Régler les PI
 	Parfaire l'action Avance Free // fct Trapeze et fct ralentissement

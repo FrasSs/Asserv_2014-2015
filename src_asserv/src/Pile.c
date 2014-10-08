@@ -14,8 +14,6 @@ extern Commande I2CNewOrder;
 
 void Pile(void) // sauvegarde de l'ordre dans la pile et incrémentation
 {
-	new_etat=((new_etat+1) <STACK_SIZE)? new_etat++:0; 
-	
 	//////////////////////////////////////////////////////////////////////////
 	// convertion des ordes I2C en double ////////////////////////////////////
 	// Enregistrement du nouvel ordre sur la pile.
@@ -24,6 +22,8 @@ void Pile(void) // sauvegarde de l'ordre dans la pile et incrémentation
 	Tab_ordre[new_etat]->Y = (double)I2CNewOrder.Y/* / 10.0*/;
 	Tab_ordre[new_etat]->Theta = (double)I2CNewOrder.Theta/* / 10000.0*/;
 	//////////////////////////////////////////////////////////////////////////
+	
+	new_etat=((new_etat+1) <STACK_SIZE)? new_etat++:0; // pointe sur la dernière case vide
 	
 	// mettre à jour le nombre d'ordre reçu (3 maxi) retour sur variable : nb_ordre
 	nb_ordre_save();
@@ -49,6 +49,7 @@ void Erase_Pile(void)
 
 void DePile(void) 
 {
+	
 	Tab_ordre[etat]->Type=STOP;
 	Tab_ordre[etat]->X=0;
 	Tab_ordre[etat]->Y=0;

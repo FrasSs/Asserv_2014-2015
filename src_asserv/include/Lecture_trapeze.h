@@ -1,16 +1,7 @@
-﻿/*
- * IncFile1.h
- *
- * Created: 27/09/2012 19:33:24
- *  Author: Léon
- */ 
-
+﻿
 #ifndef TRAPEZE_POLAIRE_H_
 #define TRAPEZE_POLAIRE_H_
-	
-/* gestion de la vitesse
-Timothee Marescot
-*/
+
 
 #include "config.h"
 
