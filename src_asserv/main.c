@@ -14,15 +14,15 @@ Commande I2CNewOrder;
 volatile static unsigned char goAsserv=0;
 
 //////////////////////////////////////////////////////////////////////////
-// Odométrie /////////////////////////////////////////////////////////////
+// OdomÃ©trie /////////////////////////////////////////////////////////////
 
-int codeur_g = 10000; // Variable contrôlé grace au timer dont l'horloge et une roue codeuse
-int codeur_d = 10000; // Variable contrôlé grace au timer dont l'horloge et une roue codeuse
+int codeur_g = 10000; // Variable contrÃ´lÃ© grace au timer dont l'horloge et une roue codeuse
+int codeur_d = 10000; // Variable contrÃ´lÃ© grace au timer dont l'horloge et une roue codeuse
 
-Commande position={0,0,0,0}; // Position temps réel du robot
+Commande position={0,0,0,0}; // Position temps rÃ©el du robot
 
-double distance_Theta = 0.0;// Vitesse Réelle = vitesse_Theta*100(donne des rad/s) car vitesse_Theta et en rad/0.01s.
-double distance_U = 0.0;	// Vitesse Réelle = vitesse_U*/10.0	(donne des m/s) car vitesse_U et en mm/0.01s.
+double distance_Theta = 0.0;// Vitesse RÃ©elle = vitesse_Theta*100(donne des rad/s) car vitesse_Theta et en rad/0.01s.
+double distance_U = 0.0;	// Vitesse RÃ©elle = vitesse_U*/10.0	(donne des m/s) car vitesse_U et en mm/0.01s.
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -36,9 +36,9 @@ Commande* Tab_ordre[] = {&Ordre1 , &Ordre2, &Ordre3, &Ordre4}; // Pile d'ordre
 Commande Ordre_actuel;	// Ordre en cours
 Commande Ordre_suivant; // Ordre suivant
 
-uint8_t etat = 0;		// numéro de l'ordre en cour
-uint8_t new_etat = 0;	// numéro du dernier ordre reçu
-int nb_ordre=0;			// nombre d'ordre enregistré
+uint8_t etat = 0;		// numÃ©ro de l'ordre en cour
+uint8_t new_etat = 0;	// numÃ©ro du dernier ordre reÃ§u
+int nb_ordre=0;			// nombre d'ordre enregistrÃ©
 
 int demarrage=0;
 
@@ -55,7 +55,7 @@ double angle_restant=0.0;
 // Ralentissement pour l'action AVANCE_Free
 double V_Min=0.0;
 
-//arrivé à l'endoit désiré
+//arrivÃ© Ã  l'endoit dÃ©sirÃ©
 int positionnement_precis_U=0;
 int positionnement_precis_T=0;
 
@@ -87,13 +87,9 @@ int main(void)
 	//Test en brute force control robot par l'asserv
 	
 	#if TEST_CODEUSES== 2
-		/*int tot_codeur_G = 0;
-		int tot_codeur_D = 0;
 	
-		int tot_codeur_G_2 = 0;
-		int tot_codeur_D_2 = 0;*/
 	
-		//Carré pour test AVANCE /////////////////////////////////////////////////
+		//CarrÃ© pour test AVANCE /////////////////////////////////////////////////
 
 		Ordre1.Type = AVANCE;
 		Ordre1.X = 0.0;
@@ -168,7 +164,7 @@ int main(void)
 	#endif	
 
 
-	//Relevé des roues codeuses
+	//RelevÃ© des roues codeuses
 
 	#if TEST_CODEUSES==1
 		tot_codeur_D=tot_codeur_D+Sens_codeur_D*(codeur_d - 10000);
@@ -223,7 +219,7 @@ int main(void)
 			
 			if ((I2CNewOrderFlag==1) && (nb_ordre<STACK_SIZE))  // un nouvel ordre recu sur le bus I2C
 			{
-				// Mise à jour du pointeur de la pile d'ordre pour pointé sur le dernier ordre reçu
+				// Mise Ã  jour du pointeur de la pile d'ordre pour pointÃ© sur le dernier ordre reÃ§u
 				
 				Pile();
 				 
@@ -246,15 +242,15 @@ int main(void)
 					position.Type=AVANCE;
 					
 					//////////////////////////////////////////////////////////////////////////
-					// Calcule des distantes restantes à parcourir
+					// Calcule des distantes restantes Ã  parcourir
 						
 					Calcule_deplacement(AVANCE); 
 					
 					//////////////////////////////////////////////////////////////////////////
-					// Trapèze vitesse avance 
+					// TrapÃ¨ze vitesse avance 
 					
-					Vitesse_C_U = 0;//calculTrapez(AVANCE,	Vitesse_C_U,	20/*V_Min*/,	70.0/*V_Max mm/10ms */,		distance_restante,	10.0/*A_Desc mm/(10ms)²*/,		10.0/*A_Acc mm/(10ms)²*/,	&positionnement_precis_U);
-					Vitesse_C_T = calculTrapez(TOURNE,	Vitesse_C_T,	0/*V_Min*/,	M_PI/*V_Max rad/10ms*/,		angle_restant,		20.0/*A_Desc rad/(10ms)²*/,		20.0/*A_Acc mm/(10ms)² */,	&positionnement_precis_T);
+					Vitesse_C_U = calculTrapez(AVANCE,	Vitesse_C_U,	20/*V_Min*/,	70.0/*V_Max mm/10ms */,		distance_restante,	10.0/*A_Desc mm/(10ms)Â²*/,		10.0/*A_Acc mm/(10ms)Â²*/,	&positionnement_precis_U);
+					Vitesse_C_T = calculTrapez(TOURNE,	Vitesse_C_T,	0/*V_Min*/,	M_PI/*V_Max rad/10ms*/,		angle_restant,		20.0/*A_Desc rad/(10ms)Â²*/,		20.0/*A_Acc mm/(10ms)Â² */,	&positionnement_precis_T);
 					
 					//////////////////////////////////////////////////////////////////////////
 					// Asservi PID
@@ -276,20 +272,20 @@ int main(void)
 				{
 					position.Type=AVANCE_Free;
 					//////////////////////////////////////////////////////////////////////////
-					// vitesse de négociation du changement de cap
+					// vitesse de nÃ©gociation du changement de cap
 					
-					V_Min=Calcul_ralentissement(30.0,	position); // ATTETION la valeur V_Min en sortie est non signé
+					V_Min=Calcul_ralentissement(30.0,	position); // ATTETION la valeur V_Min en sortie est non signÃ©
 					
 					//////////////////////////////////////////////////////////////////////////
-					// Calcule des distantes restantes à parcourir	
+					// Calcule des distantes restantes Ã  parcourir	
 					
 					Calcule_deplacement(AVANCE_Free); 
 					
 					//////////////////////////////////////////////////////////////////////////
-					// Trapèze vitesse avance 
+					// TrapÃ¨ze vitesse avance 
 					
-					Vitesse_C_U = calculTrapez(AVANCE,	Vitesse_C_U,	V_Min/*V_Min*/,		5/*V_Max mm/10ms */,		distance_restante,	2.0/*A_Desc mm/(10ms)² */,	2.0/*A_Acc mm/(10ms)² */,	&positionnement_precis_U);
-					Vitesse_C_T = calculTrapez(TOURNE,	Vitesse_C_T,	0/*V_Min*/,			0.115/*V_Max rad/10ms */,	angle_restant,		3.0/*A_Desc rad/(10ms)² */, 3.0/*A_Acc rad/(10ms)² */,	&positionnement_precis_T);
+					Vitesse_C_U = calculTrapez(AVANCE,	Vitesse_C_U,	V_Min/*V_Min*/,		5/*V_Max mm/10ms */,		distance_restante,	2.0/*A_Desc mm/(10ms)Â² */,	2.0/*A_Acc mm/(10ms)Â² */,	&positionnement_precis_U);
+					Vitesse_C_T = calculTrapez(TOURNE,	Vitesse_C_T,	0/*V_Min*/,			0.115/*V_Max rad/10ms */,	angle_restant,		3.0/*A_Desc rad/(10ms)Â² */, 3.0/*A_Acc rad/(10ms)Â² */,	&positionnement_precis_T);
 					
 					//////////////////////////////////////////////////////////////////////////
 					// Asservi PID
@@ -312,12 +308,12 @@ int main(void)
 				{
 					position.Type=TOURNE;
 					//////////////////////////////////////////////////////////////////////////
-					// Trapèze vitesse angulaire 
+					// TrapÃ¨ze vitesse angulaire 
 					
-					Calcule_deplacement(TOURNE); // conversion position cartésienne en polaire erreur_U la distance et commande_Theta la distance
+					Calcule_deplacement(TOURNE); // conversion position cartÃ©sienne en polaire erreur_U la distance et commande_Theta la distance
 					
-					Vitesse_C_U = calculTrapez(AVANCE,	Vitesse_C_U,	0.0/*V_Min*/,	15.0/*V_Max mm/10ms */,		distance_restante,	2.0/*A_Desc mm/(10ms)² */,	2.0/*A_Acc mm/(10ms)² */,	&positionnement_precis_U);
-					Vitesse_C_T = calculTrapez(TOURNE,	Vitesse_C_T,	0.0/*V_Min*/,	0.115/*V_Max rad/10ms */,	angle_restant,		3.5/*A_Desc rad/(10ms)² */, 2.5/*A_Acc rad/(10ms)² */,	&positionnement_precis_T);
+					Vitesse_C_U = calculTrapez(AVANCE,	Vitesse_C_U,	0.0/*V_Min*/,	15.0/*V_Max mm/10ms */,		distance_restante,	2.0/*A_Desc mm/(10ms)Â² */,	2.0/*A_Acc mm/(10ms)Â² */,	&positionnement_precis_U);
+					Vitesse_C_T = calculTrapez(TOURNE,	Vitesse_C_T,	0.0/*V_Min*/,	0.115/*V_Max rad/10ms */,	angle_restant,		3.5/*A_Desc rad/(10ms)Â² */, 2.5/*A_Acc rad/(10ms)Â² */,	&positionnement_precis_T);
 					
 					//////////////////////////////////////////////////////////////////////////
 					/// Asservi PID
@@ -348,7 +344,7 @@ int main(void)
 					distance_restante=0;
 					angle_restant=0;
 						
-					// passage à l'orde suivant si un nouveau à été envoyé
+					// passage Ã  l'orde suivant si un nouveau Ã  Ã©tÃ© envoyÃ©
 					positionnement_precis_U=1;
 					positionnement_precis_T=1;
 					break;
@@ -367,19 +363,19 @@ int main(void)
 			
 			//////////////////////////////////////////////////////////////////////////
 			
-			goAsserv = 0; // fin de mise à jour de l'Asservissement
+			goAsserv = 0; // fin de mise Ã  jour de l'Asservissement
 			
 		} // end if goAsserv	
 		
 		//////////////////////////////////////////////////////////////////////////
 		// MOTEUR ////////////////////////////////////////////////////////////////
-		// Mise à jour des registres des pwm commandant les moteurs
+		// Mise Ã  jour des registres des pwm commandant les moteurs
 		
-		pwm_set(cablage_mot_D,Sens_mot_D*moteur_D); // attention moteur gauche inversé
-		pwm_set(cablage_mot_G,Sens_mot_G*moteur_G); // modifié pour le petit robot
+		pwm_set(cablage_mot_D,Sens_mot_D*moteur_D); // attention moteur gauche inversÃ©
+		pwm_set(cablage_mot_G,Sens_mot_G*moteur_G); // modifiÃ© pour le petit robot
 	
 		//////////////////////////////////////////////////////////////////////////
-		// fonction de déroulement de la pile + mise à jour les commandes et nb_ordre
+		// fonction de dÃ©roulement de la pile + mise Ã  jour les commandes et nb_ordre
 		
 		fct_Ordre_suivant(&positionnement_precis_U,&positionnement_precis_T,&demarrage);
 		
@@ -390,17 +386,17 @@ int main(void)
 
 
 //////////////////////////////////////////////////////////////////////////
-// Que se passe-t-il quand on désactive les interruptions au moment de cette interruption
-// Qu'elle sera l'impacte sur le calcule de la vitesse de déplacement (constente de temps plus précisément
+// Que se passe-t-il quand on dÃ©sactive les interruptions au moment de cette interruption
+// Qu'elle sera l'impacte sur le calcule de la vitesse de dÃ©placement (constente de temps plus prÃ©cisÃ©ment
 //  DANS config.c :
-//		- Valeur de Comparé : 0x9C40=40000(dec) (TC_SetCompareA( &TCD1, 0x9C40 ); )
+//		- Valeur de ComparÃ© : 0x9C40=40000(dec) (TC_SetCompareA( &TCD1, 0x9C40 ); )
 //		- Clock : 32Mhz (CLKSYS_Main_ClockSource_Select( CLK_SCLKSEL_RC32M_gc );)
-//		- Sensibilité du Timer : Clock/8=4Mhz (TC1_ConfigClockSource( &TCD1, TC_CLKSEL_DIV8_gc );)
+//		- SensibilitÃ© du Timer : Clock/8=4Mhz (TC1_ConfigClockSource( &TCD1, TC_CLKSEL_DIV8_gc );)
 //	=>(1/4Mhz)*40000=10ms
-ISR(TCD1_CCA_vect) // Interruption sur Timer permettant un rebouclage temporisé
+ISR(TCD1_CCA_vect) // Interruption sur Timer permettant un rebouclage temporisÃ©
 {
-	TC_Restart( &TCD1 ); // redémarrer le timer
-	TC_SetCount(&TCD1,0); // Mettre le Compter A du Timer/Comparateur D1 à 0
+	TC_Restart( &TCD1 ); // redÃ©marrer le timer
+	TC_SetCount(&TCD1,0); // Mettre le Compter A du Timer/Comparateur D1 Ã  0
 
 	goAsserv = 1; // Demande de mise a jour asservissement
 }
