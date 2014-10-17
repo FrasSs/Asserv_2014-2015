@@ -219,25 +219,7 @@ int main(void)
 			fct_odometrie();
 			
 			//////////////////////////////////////////////////////////////////////////
-			// I2C ///////////////////////////////////////////////////////////////////
-			
-			if ((I2CNewOrderFlag==1) && (nb_ordre<STACK_SIZE))  // un nouvel ordre recu sur le bus I2C
-			{
-				// Mise à jour du pointeur de la pile d'ordre pour pointé sur le dernier ordre reçu
-				
-				Pile();
-				 
-				if (demarrage<5)
-				{
-					demarrage+=1;
-				}
-				
-				I2CNewOrderFlag = 0;
-			}
-			
-			//////////////////////////////////////////////////////////////////////////
 			// Ordres ////////////////////////////////////////////////////////////////
-			
 			switch (Ordre_actuel.Type)
 			{
 // AVANCE
@@ -253,7 +235,7 @@ int main(void)
 					//////////////////////////////////////////////////////////////////////////
 					// Trapèze vitesse avance 
 					
-					Vitesse_C_U = 0;//calculTrapez(AVANCE,	Vitesse_C_U,	20/*V_Min*/,	70.0/*V_Max mm/10ms */,		distance_restante,	10.0/*A_Desc mm/(10ms)²*/,		10.0/*A_Acc mm/(10ms)²*/,	&positionnement_precis_U);
+					Vitesse_C_U = calculTrapez(AVANCE,	Vitesse_C_U,	20/*V_Min*/,	70.0/*V_Max mm/10ms */,		distance_restante,	10.0/*A_Desc mm/(10ms)²*/,		10.0/*A_Acc mm/(10ms)²*/,	&positionnement_precis_U);
 					Vitesse_C_T = calculTrapez(TOURNE,	Vitesse_C_T,	0/*V_Min*/,	M_PI/*V_Max rad/10ms*/,		angle_restant,		20.0/*A_Desc rad/(10ms)²*/,		20.0/*A_Acc mm/(10ms)² */,	&positionnement_precis_T);
 					
 					//////////////////////////////////////////////////////////////////////////
@@ -271,7 +253,8 @@ int main(void)
 					break;
 				}
 
-// >>> AVANCE_Free				
+// >>> AVANCE_Free	
+#if 1			
 				case AVANCE_Free :
 				{
 					position.Type=AVANCE_Free;
@@ -354,7 +337,7 @@ int main(void)
 					break;
 				}
 				
-				
+#endif				
 				default:
 					break;	
 					
@@ -372,18 +355,40 @@ int main(void)
 		} // end if goAsserv	
 		
 		//////////////////////////////////////////////////////////////////////////
+		/// PRODUCTEUR I2C ///////////////////////////////////////////////////////
+					
+		if ((I2CNewOrderFlag==1) && (nb_ordre<STACK_SIZE))  // un nouvel ordre recu sur le bus I2C
+		{
+			// Mise à jour du pointeur de la pile d'ordre pour pointé sur le dernier ordre reçu
+						
+			Pile();
+						
+			if (demarrage<5)
+			{
+				demarrage+=1;
+			}
+						
+			I2CNewOrderFlag = 0;
+						
+		}
+		
+		// CONSOMMATEUR //////////////////////////////////////////////////////////
+		
+		fct_Ordre_suivant(&positionnement_precis_U,&positionnement_precis_T,&demarrage); // fonction de déroulement de la pile + mise à jour les commandes et nb_ordre
+		
+		
+		//////////////////////////////////////////////////////////////////////////
 		// MOTEUR ////////////////////////////////////////////////////////////////
 		// Mise à jour des registres des pwm commandant les moteurs
 		
 		pwm_set(cablage_mot_D,Sens_mot_D*moteur_D); // attention moteur gauche inversé
 		pwm_set(cablage_mot_G,Sens_mot_G*moteur_G); // modifié pour le petit robot
-	
-		//////////////////////////////////////////////////////////////////////////
-		// fonction de déroulement de la pile + mise à jour les commandes et nb_ordre
 		
-		fct_Ordre_suivant(&positionnement_precis_U,&positionnement_precis_T,&demarrage);
 		
 		//////////////////////////////////////////////////////////////////////////
+		
+		
+		
 	} // end while(1)
 	
 } // end fct main

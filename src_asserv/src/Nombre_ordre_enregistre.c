@@ -10,13 +10,39 @@ extern int nb_ordre;
 // nb_ordre : nombre d'ordre restant//////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
-void nb_ordre_save(void)
+void nb_ordre_find(void)
 {
-	int i=0,j=etat;
+	int i,j;
 	
-	for(i=0,j=etat;j!=new_etat;i++)
+	
+	if (etat!=new_etat)
 	{
-		j=(j<STACK_SIZE) ? j+1 : 0;
+		for(i=0,j=etat;j!=new_etat;i++)
+		{
+			j=((j+1)<STACK_SIZE) ? j+1 : 0;
+		}
+		
+		nb_ordre = i;
 	}
-	nb_ordre = i;
+	else
+	{
+		if (nb_ordre)
+		{
+			nb_ordre=4;
+		}
+		else
+		{
+			nb_ordre=0;
+		}
+	}
+}
+
+void nb_ordre_pp(void)
+{
+	nb_ordre++;
+}
+
+void nb_ordre_mm(void)
+{
+	nb_ordre--;
 }

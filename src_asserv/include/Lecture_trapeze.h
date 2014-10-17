@@ -2,7 +2,7 @@
 #ifndef TRAPEZE_POLAIRE_H_
 #define TRAPEZE_POLAIRE_H_
 
-
+#include <math.h>
 #include "config.h"
 
 double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double Dist, double A_Desc,double A_Acc,int *Arrive);

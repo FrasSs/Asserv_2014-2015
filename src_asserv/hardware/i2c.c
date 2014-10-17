@@ -57,6 +57,7 @@ void i2cWrite(uint8_t data[], const uint8_t size)
 }
 
 #if !defined(__DOXYGEN__)
+
 // Fonction d'interruption du twi C.
 ISR(TWIC_TWIS_vect)
 {
@@ -64,20 +65,30 @@ ISR(TWIC_TWIS_vect)
 	TWI_SlaveInterruptHandler(&_twiSlave);
 
 	//Si on est arrivé a la fin d'une lecture on appelle la fonction de call back.
-	if((_twiSlave.result == TWIS_RESULT_OK) && ((~(_twiSlave.interface->SLAVE.STATUS&TWI_SLAVE_DIR_bm)) || (_twiSlave.interface->SLAVE.STATUS&TWI_SLAVE_DIR_bm)))
+	if((        _twiSlave.result == TWIS_RESULT_OK) && 
+			((~(_twiSlave.interface->SLAVE.STATUS & TWI_SLAVE_DIR_bm)) 
+			 ||(_twiSlave.interface->SLAVE.STATUS & TWI_SLAVE_DIR_bm)))
+	{
 		I2C_CALL_BACK(_twiSlave.receivedData[0], (uint8_t*)(_twiSlave.receivedData+1), _twiSlave.bytesReceived-1);
+	}
+		
 	//leds_off(LED4);
 }
 
 // Fonction d'interruption du twi E.
+
 ISR(TWIE_TWIS_vect)
 {
 	//leds_on(LED4);
 	TWI_SlaveInterruptHandler(&_twiSlave);
 	
 	//Si on est arrivé a la fin d'une lecture on appelle la fonction de call back.
-	if((_twiSlave.result == TWIS_RESULT_OK) && ((~(_twiSlave.interface->SLAVE.STATUS&TWI_SLAVE_DIR_bm)) || (_twiSlave.interface->SLAVE.STATUS&TWI_SLAVE_DIR_bm)))
+	if((          _twiSlave.result == TWIS_RESULT_OK)  
+			&&((~(_twiSlave.interface->SLAVE.STATUS & TWI_SLAVE_DIR_bm)) 
+			||   (_twiSlave.interface->SLAVE.STATUS & TWI_SLAVE_DIR_bm)))
+	{	
 		I2C_CALL_BACK(_twiSlave.receivedData[0], (uint8_t*)(_twiSlave.receivedData+1), _twiSlave.bytesReceived-1);
+	}
 	//leds_off(LED4);
 }
 #endif

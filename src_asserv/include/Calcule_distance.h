@@ -3,6 +3,8 @@
 #define TRAPEZE_POLAIRE_H_
 
 
+#include <math.h>
+#include "Modulo_pi.h"
 #include "config.h"
 
 //////////////////////////////////////////////////////////////////////////

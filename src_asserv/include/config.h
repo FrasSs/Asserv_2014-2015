@@ -19,20 +19,20 @@
 #include "../hardware/leds.h"
 #include "../hardware/i2c.h"
 
-#include "struct_Commande.h"
-#include "Lecture_trapeze.h"
+	#include "struct_Commande.h"
+	#include "Lecture_trapeze.h"
 
-#include "Calcule_distance.h"
-#include "detecBugBloquage.h"
+	#include "Calcule_distance.h"
+	#include "detecBugBloquage.h"
 
 #include "Modulo_pi.h"
 #include "Mouvement_Robot.h"
 #include "Nombre_ordre_enregistre.h"
-#include "Odometrie.h"
+	#include "Odometrie.h"
 #include "Ordres.h"
-#include "PI_Asservissement.h"
-#include "Pile.h"
-#include "Ralentissement_free.h"
+	#include "PI_Asservissement.h"
+	#include "Pile.h"
+	#include "Ralentissement_free.h"
 #include "STOP_Force.h"
 #include "traitementI2C.h"
 

@@ -1,6 +1,4 @@
 ﻿
-#include <math.h>
-
 #include "../include/Calcule_distance.h"
 
 

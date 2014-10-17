@@ -5,6 +5,7 @@
 extern Commande* Tab_ordre[];
 extern uint8_t etat;
 extern uint8_t new_etat;
+extern uint8_t nb_ordre;
 extern Commande I2CNewOrder;
 
 //////////////////////////////////////////////////////////////////////////
@@ -26,7 +27,7 @@ void Pile(void) // sauvegarde de l'ordre dans la pile et incrémentation
 	new_etat=((new_etat+1) <STACK_SIZE)? new_etat++:0; // pointe sur la dernière case vide
 	
 	// mettre à jour le nombre d'ordre reçu (3 maxi) retour sur variable : nb_ordre
-	nb_ordre_save();
+	nb_ordre_pp();
 }
 //////////////////////////////////////////////////////////////////////////
 
@@ -44,7 +45,7 @@ void Erase_Pile(void)
 	// mettre à jour le nombre d'ordre reçu (3 maxi) retour sur variable : nb_ordre
 	new_etat=0;
 	etat=0;
-	nb_ordre_save();
+	nb_ordre=0
 }
 
 void DePile(void) 
@@ -59,5 +60,5 @@ void DePile(void)
 	etat=((etat+1)<STACK_SIZE) ? etat+1 : 0;
 	
 	// mettre à jour le nombre d'ordre reçu (3 maxi) retour sur variable : nb_ordre
-	nb_ordre_save();
+	nb_ordre_mm();
 }

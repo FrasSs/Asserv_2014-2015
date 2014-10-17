@@ -1,6 +1,7 @@
 #ifndef ORDRE
 #define ORDRE
 
+#include "Pile.h"
 #include "config.h"
 
 void Actualisation_Ordre(void); // Mise à joure de Ordre_actuel et Ordre_suivant

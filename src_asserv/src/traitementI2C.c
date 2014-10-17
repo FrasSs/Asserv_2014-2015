@@ -89,7 +89,7 @@ void traitementI2C(unsigned char * msg,unsigned char size)
 			
 		case STOP_F:
 		{
-			fct_STOP_F(STOP);
+			fct_STOP_F();
 			I2CNewOrder.Type=STOP;
 			I2CNewOrderFlag = 1;
 			break;

@@ -1,6 +1,5 @@
 
 #include "../include/detecBugBloquage.h"
-#include "../include/STOP_Force.h"
 
 #define Seuil_Theta 0
 #define Seuil_U 0

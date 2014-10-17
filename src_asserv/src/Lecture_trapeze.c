@@ -1,6 +1,5 @@
 ﻿
 #include "../include/Lecture_trapeze.h"
-#include <math.h>
 
 //////////////////////////////////////////////////////////////////////////
 // Trapèze Vitesse                      ///V_Max vitesse maximale/////////
@@ -13,7 +12,6 @@
 //						    /D_Desc\	//////////////////////////////////
 double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double Dist, double A_Desc,double A_Acc, int *Arrive)
 {
-	
 //////////////////////////////////////////////////////////////////////////
 // Variable Local
 	int rebouclage = 1; // variable de recouclage
