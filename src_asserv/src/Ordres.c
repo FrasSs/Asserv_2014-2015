@@ -6,6 +6,7 @@ extern Commande Ordre_suivant;
 extern Commande* Tab_ordre[];
 extern uint8_t etat;
 extern int nb_ordre;
+extern uint8_t I2CNewOrderFlag;
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -38,7 +39,7 @@ void Actualisation_Ordre() // mise à jour de Ordre_actuel et Ordre_suivant
 //fct_Ordre_suivant : fonction permettant de passer à l'ordre suivant/////
 //////////////////////////////////////////////////////////////////////////
 
-void fct_Ordre_suivant(int *cond1,int *cond2,int *demarrage)
+void Ordre_suivant_fct(int *cond1,int *cond2,int *demarrage)
 {
 	if (((*cond1==1)&&(*cond2==1)) || (*demarrage==1)) // si fin d'état
 	{		
@@ -64,3 +65,19 @@ void fct_Ordre_suivant(int *cond1,int *cond2,int *demarrage)
 //////////////////////////////////////////////////////////////////////////
 // fct ordre suivant /////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
+void Recep_Ordre_i2c(int *demarrage)
+{
+	if ((I2CNewOrderFlag==1) && (nb_ordre<STACK_SIZE))  // un nouvel ordre recu sur le bus I2C
+	{
+		// Mise a  jour du pointeur de la pile d'ordre pour pointe sur le dernier ordre rea§u
+
+		Pile();
+			
+		if (*demarrage<5)
+		{
+			*demarrage+=1;
+		}
+			
+		I2CNewOrderFlag = 0;
+	}
+}

@@ -20,7 +20,7 @@ void Calcule_deplacement(int action)
 	
 	distance_restante = sqrt((X_Bp)*(X_Bp) + (Y_Bp)*(Y_Bp) );
 	
-	Theta_B=atan2(Y_Bp,X_Bp);	// calcule de l'angle pour la position demandé sur le repère fixe au robot(mais non orienté, parallèle au repère de base du terrain).
+	Theta_B=atan2(X_Bp,Y_Bp);	// calcule de l'angle pour la position demandé sur le repère fixe au robot(mais non orienté, parallèle au repère de base du terrain).
 	Theta_B=Modulo_Pi(Theta_B);
 		
 	Theta_Bp=Theta_B-position.Theta;	// calcule de l'angle  avec l'orientation réel du robot

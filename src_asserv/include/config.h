@@ -15,9 +15,9 @@
 #include <stdint.h>
 #include <math.h>
 
-#include "../hardware/pwm.h"
+	#include "../hardware/pwm.h"
 #include "../hardware/leds.h"
-#include "../hardware/i2c.h"
+	#include "../hardware/i2c.h"
 
 	#include "struct_Commande.h"
 	#include "Lecture_trapeze.h"
@@ -106,7 +106,9 @@
 //////////////////////////////////////////////////////////////////////////
 //Test
 
-#define TEST_CODEUSES 0
+#define Rien 0
+#define Brute_force 1
+#define Test_codeuse 2
 
 //////////////////////////////////////////////////////////////////////////
 // Pile

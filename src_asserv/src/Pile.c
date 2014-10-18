@@ -45,7 +45,7 @@ void Erase_Pile(void)
 	// mettre à jour le nombre d'ordre reçu (3 maxi) retour sur variable : nb_ordre
 	new_etat=0;
 	etat=0;
-	nb_ordre=0
+	nb_ordre=0;
 }
 
 void DePile(void) 

@@ -5,6 +5,8 @@
 #include "../hardware/i2c.h"
 #include "Mouvement_Robot.h"
 
+
+
 typedef struct _i2c_packet {
 	uint16_t Type;
 	int16_t X;
