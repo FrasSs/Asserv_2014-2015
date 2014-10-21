@@ -75,118 +75,8 @@ double moteur_D = 0.0;
 //////////////////////////////////////////////////////////////////////////
 // Test et debuging //////////////////////////////////////////////////////
 
-#define SIMU Rien
+#define SIMU Brute_force
 
-//Test en brute force control robot par l'asserv
-#if SIMU==Brute_force
-	
-	//Carre pour test AVANCE /////////////////////////////////////////////////
-
-	Ordre1.Type = AVANCE;
-	Ordre1.X = 0.0;
-	Ordre1.Y = 500.0;
-	Ordre1.Theta = -M_PI_2;
-		
-	Ordre2.Type = AVANCE;
-	Ordre2.X = 300.0;
-	Ordre2.Y = 500.0;
-	Ordre2.Theta = -M_PI;
-		
-	Ordre3.Type = AVANCE;
-	Ordre3.X = 300.0;
-	Ordre3.Y = 0.0;
-	Ordre3.Theta = M_PI_2;
-		
-	Ordre4.Type = AVANCE;
-	Ordre4.X = 0.0;
-	Ordre4.Y = 0.0;
-	Ordre4.Theta = 0;
-		
-	demarrage=1;
-	etat=0;
-	new_etat=0;
-	nb_ordre=4;
-	
-	//Arc de cerlce pour tester AVANCE_Free////////////////////////////////////
-
-	/*Ordre1.Type = AVANCE_Free;
-	Ordre1.X = 50.0;
-	Ordre1.Y = 150.0;
-	Ordre1.Theta = -M_PI_2;
-	
-	Ordre2.Type = AVANCE_Free;
-	Ordre2.X = 225.0;
-	Ordre2.Y = 330.0;
-	Ordre2.Theta = -M_PI;
-	
-	Ordre3.Type = AVANCE_Free;
-	Ordre3.X = 400.0;
-	Ordre3.Y = 400.0;
-	Ordre3.Theta = M_PI_2;
-	
-	Ordre4.Type = AVANCE;
-	Ordre4.X = 0.0;
-	Ordre4.Y = 0.0;
-	Ordre4.Theta = 0;
-	
-	///Autre /////////////////////////////////////////////////////////////////
-	
-	
-	Ordre1.Type = AVANCE;
-	Ordre1.X = 0.0;
-	Ordre1.Y = 600.0;
-	Ordre1.Theta = -M_PI_2;
-	
-	Ordre2.Type = AVANCE;
-	Ordre2.X = -900.0;
-	Ordre2.Y = 600.0;
-	Ordre2.Theta = -M_PI_2;
-	
-	Ordre3.Type = AVANCE;
-	Ordre3.X = -1500.0;
-	Ordre3.Y = 600.0;
-	Ordre3.Theta = 0;
-	
-	Ordre4.Type = AVANCE;
-	Ordre4.X = -1500.0;
-	Ordre4.Y = 0.0;
-	Ordre4.Theta = 0;
-	
-	new_etat=4;
-	*/
-#endif	
-
-
-//Releve des roues codeuses
-#if SIMU==Test_codeuse
-	tot_codeur_D=tot_codeur_D+Sens_codeur_D*(codeur_d - 10000);
-	tot_codeur_G=tot_codeur_G+Sens_codeur_G*(codeur_g - 10000);
-			
-			
-	if(tot_codeur_D>=20000)
-	{
-		tot_codeur_D-=20000;
-		tot_codeur_D_2++;
-	}
-	if(tot_codeur_D<=-20000)
-	{
-		tot_codeur_D+=20000;
-		tot_codeur_D_2--;
-	}
-			
-			
-	if(tot_codeur_G>=20000)
-	{
-		tot_codeur_G-=20000;
-		tot_codeur_G_2++;
-	}
-	if(tot_codeur_G<=-20000)
-	{
-		tot_codeur_G+=20000;
-
-		tot_codeur_G_2--;
-	}
-#endif
 //////////////////////////////////////////////////////////////////////////
 
 #endif
@@ -195,6 +85,19 @@ double moteur_D = 0.0;
 
 int main(void)
 {
+
+
+#if 1
+	//Test en brute force control robot par l'asserv
+	#if (SIMU==Brute_force)	
+	#include "./include/Teste_Commande.h"
+	#endif	
+
+	//Releve des roues codeuses
+	#if SIMU==Test_codeuse
+	#include "./include/Teste_codeuse.h"	
+	#endif
+#endif
 	//////////////////////////////////////////////////////////////////////////
 	// Initialisation ////////////////////////////////////////////////////////
 	
@@ -367,13 +270,13 @@ int main(void)
 		// MOTEUR ////////////////////////////////////////////////////////////////
 		// Mise a  jour des registres des pwm commandant les moteurs
 
-		pwm_set(cablage_mot_D,Sens_mot_D*moteur_D); // attention moteur gauche inversé
-		pwm_set(cablage_mot_G,Sens_mot_G*moteur_G); // modifié pour le petit robot
+		moteur_D=-30;
+		moteur_G=30;
+
+		pwm_set(cablage_mot_D,moteur_D/*Sens_mot_D*moteur_D*/); // attention moteur gauche inversé
+		pwm_set(cablage_mot_G,moteur_G/*Sens_mot_G*moteur_G*/); // modifié pour le petit robot
 
 		//////////////////////////////////////////////////////////////////////////
-		
-		
-		
 	} // end while(1)
 	
 } // end fct main
