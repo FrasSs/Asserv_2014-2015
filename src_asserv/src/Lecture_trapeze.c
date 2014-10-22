@@ -12,6 +12,7 @@
 //						    /D_Desc\	//////////////////////////////////
 double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double Dist, double A_Desc,double A_Acc, int *Arrive)
 {
+#if 1
 //////////////////////////////////////////////////////////////////////////
 // Variable Local
 	int rebouclage = 1; // variable de recouclage
@@ -90,11 +91,11 @@ double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double
 		Dist_old=&Dist_old_UF;
 		D_Desc_old=&D_Desc_old_UF;
 	}
+#endif
 	
 	if (!(*Arrive))
 	{
-		//////////////////////////////////////////////////////////////////////////
-//>>>>>>>>>>>>>>>>> CEtte partie est peut'être source de bug !!!!!!!!!!///
+		# if 1
 		//////////////////////////////////////////////////////////////////////////
 		if (Dist!=0) // si un déplacement est requis
 		{
@@ -102,13 +103,7 @@ double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double
 			{
 				if (Vitesse<0) // si la vitesse actuelle n'est pas du même sens que le déplacement 
 				{
-					// ATTENTION non linéraire
-					Vitesse=0; // inicialisation de la vitesse
-				
-				
-					//////////////////////////////////////////////////////////////////////////
-					// reset complet des variables statices
-					*etape=1; // Inicialisation (mettre la variable pointé à un pour recommencer le sycle au démarage)
+					*etape=1; // nouveau cycle
 				}
 				*sens=1; // sens du déplacement (avance ou tourne à guauche)
 			}
@@ -116,13 +111,7 @@ double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double
 			{
 				if (Vitesse>0) // si la vitesse actuelle n'est pas du même sens que le déplacement 
 				{
-					// ATTENTION non linéraire
-					Vitesse=0; // inicialisation de la vitesse
-				
-				
-					//////////////////////////////////////////////////////////////////////////
-					// reset complet des variables statices
-					*etape=1; // Inicialisation (mettre la variable pointé à un pour recommencer le sycle au démarage)
+					*etape=1; // nouveau cycle
 				}
 				*sens=-1; // sens du déplacement (recule ou tourne à droite)
 			}
@@ -135,6 +124,7 @@ double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double
 		V_Min*=(*sens); // Application du changement (rend signé la valeur de V_Min)
 		A_Desc*=(*sens);
 		A_Acc*=(*sens);
+		#endif
 	
 		//////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////
@@ -164,8 +154,6 @@ double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double
 					else
 					{
 						*D_Desc_old=*D_Desc; // sauvegarde de l'ancienne distance de descélération
-						
-						
 						*D_Desc=(Vitesse+A_Acc); // mesure de la distance parcouru à la vitesse actuelle en un cycle
 					}
 				
@@ -186,9 +174,7 @@ double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double
 						}
 					}
 					
-					
 					//////////////////////////////////////////////////////////////////////////
-					
 					break;
 				}
 			
@@ -199,16 +185,16 @@ double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double
  				{
 					if((fabs(Dist)<(*D_Desc))) // si on est arrivé ou si la distance restante est inferieur à la distance de descélération.
 					{
-						(*etape)++;  // passer à l'étape suivante
-						rebouclage=1; // reboucler directement par le While(recboucle) de cette fct (ne passe donc pas par le main)
+						(*etape)++;		// passer à l'étape suivante
+						rebouclage=1;	// reboucler directement par le While(recboucle) de cette fct (ne passe donc pas par le main)
 					
 						*Dist_old=Dist; // sauvegarde de la distance restante pour le calcule de la vitesse de descélération
 						*Vitesse_old=Vitesse; //Idem, sauvegarde de Vitesse
 						
 						// si la distance est trop faible pour bouger (distance trop courte)
-						if (fabs(Vitesse)<V_Min) 
+						if (fabs(Vitesse)<fabs(V_Min)) 
 						{
-							Vitesse=V_Min;
+							Vitesse=V_Min; // non linéarité de la vitesse
 						}
 					}
 					else
@@ -221,17 +207,7 @@ double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double
 				// descélération 	
 				case 3 :  
 				{
-					
-					
-					if (Vitesse>15)
-					{
-						Vitesse=((fabs(Dist)/(*Dist_old))*(*Vitesse_old-A_Desc-V_Min))+V_Min;
-					}
-					else
-					{
-						Vitesse=15;
-					}
-					
+					Vitesse=((fabs(Dist)/(*Dist_old))*(*Vitesse_old-A_Desc-V_Min))+V_Min;
 					
 					*etape=1;
 					
@@ -244,16 +220,7 @@ double calculTrapez (int action,double Vitesse,double V_Min,double V_Max, double
 		}
 	}
 	else // Le robot est arrivé à destination
-	{
-		if (action==AVANCE_Free)
-		{
-			Vitesse = V_Min; // arrêt du Robot
-		}
-		else
-		{
-			Vitesse = 0.0; // arrêt du Robot
-		}
-					
+	{					
 		//////////////////////////////////////////////////////////////////////////
 		// reset complet des variables statices
 		*etape=1; // Inicialisation (mettre la variable pointé à un pour recommencer le sycle au démarage)

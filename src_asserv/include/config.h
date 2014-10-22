@@ -53,7 +53,7 @@
 #define Kp_U (double)1.0//0.8
 
 #define Ki_T (double)5.0//0.005
-#define Kp_T (double)0.0//1.2
+#define Kp_T (double)0.5
 
 //Commande moteur
 #define Sens_mot_D -1

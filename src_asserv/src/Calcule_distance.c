@@ -51,7 +51,6 @@ void Calcule_deplacement(int action)
 			if (distance_restante_reel<20) // phase d'aproche final (positionnement plus précis en U et mise en position du Theta ordonné)
 			{
 				angle_restant=Ordre_actuel.Theta-position.Theta;// angle à parcourir pour arriver à l'angle commendé sur le repère fixe au robot
-				
 			}
 			// Phase d'approche 1 : se caler son cap sur le point demandé
 			else
@@ -83,26 +82,14 @@ void Calcule_deplacement(int action)
 			}
 			else
 			{
-				//////////////////////////////////////////////////////////////////////////
-				// en cas de distance Théta trop grande, stoper U pour règler seulement theta
-				if ((fabs(angle_restant)>(M_PI/8.0))&&(distance_restante_reel>30.0))
-				{
-					positionnement_precis_U= 1;
-				}
-				else
-				{
-					
-					positionnement_precis_U=0;
-				}
-				//////////////////////////////////////////////////////////////////////////
-				
+				positionnement_precis_U=0;
 			}
 			//////////////////////////////////////////////////////////////////////////
 			
 			break;
 		}
 		
-		
+#if 1		
 		case AVANCE_Free:
 		{
 			
@@ -190,7 +177,7 @@ void Calcule_deplacement(int action)
 			break;
 			//////////////////////////////////////////////////////////////////////////
 		}	
-		
+#endif		
 		default:
 			break;
 		
