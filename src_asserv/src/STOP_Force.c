@@ -26,6 +26,6 @@ void fct_STOP_F(void)
 				
 	acknowledge_bloquage(); //??????
 	
-	Erase_Pile();
+	Erase_Fifo();
 	Actualisation_Ordre();
 }

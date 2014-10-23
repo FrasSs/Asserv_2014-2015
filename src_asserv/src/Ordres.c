@@ -48,7 +48,7 @@ void Ordre_suivant_fct(int *cond1,int *cond2,int *demarrage)
 			// mise à jour des ordres de la pile sur Ordre_actuel et Ordre_suivant
 			Actualisation_Ordre();
 			
-			DePile(); // Dépilement de la Pile
+			Fifo_out(); // Dépilement de la Pile
 			
 			*cond1=0;
 			*cond2=0;			
@@ -71,7 +71,7 @@ void Recep_Ordre_i2c(int *demarrage)
 	{
 		// Mise a  jour du pointeur de la pile d'ordre pour pointe sur le dernier ordre rea§u
 
-		Pile();
+		Fifo_in();
 			
 		if (*demarrage<5)
 		{

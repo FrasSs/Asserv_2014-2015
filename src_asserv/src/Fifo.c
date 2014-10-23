@@ -1,5 +1,5 @@
 
-#include "../include/Pile.h"
+#include "../include/Fifo.h"
 
 
 extern Commande* Tab_ordre[];
@@ -13,15 +13,15 @@ extern Commande I2CNewOrder;
 //I2CNewOrder : nouvel ordre envoyé par l'I2C/////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
-void Pile(void) // sauvegarde de l'ordre dans la pile et incrémentation
+void Fifo_in(void) // sauvegarde de l'ordre dans la pile et incrémentation
 {
 	//////////////////////////////////////////////////////////////////////////
 	// convertion des ordes I2C en double ////////////////////////////////////
 	// Enregistrement du nouvel ordre sur la pile.
 	Tab_ordre[new_etat]->Type = I2CNewOrder.Type;
-	Tab_ordre[new_etat]->X = (double)I2CNewOrder.X/* / 10.0*/;
-	Tab_ordre[new_etat]->Y = (double)I2CNewOrder.Y/* / 10.0*/;
-	Tab_ordre[new_etat]->Theta = (double)I2CNewOrder.Theta/* / 10000.0*/;
+	Tab_ordre[new_etat]->X = (double)I2CNewOrder.X;
+	Tab_ordre[new_etat]->Y = (double)I2CNewOrder.Y;
+	Tab_ordre[new_etat]->Theta = (double)I2CNewOrder.Theta;
 	//////////////////////////////////////////////////////////////////////////
 	
 	new_etat=((new_etat+1) <STACK_SIZE)? new_etat++:0; // pointe sur la dernière case vide
@@ -31,7 +31,7 @@ void Pile(void) // sauvegarde de l'ordre dans la pile et incrémentation
 }
 //////////////////////////////////////////////////////////////////////////
 
-void Erase_Pile(void)
+void Erase_Fifo(void)
 {
 	int eff_ordre;
 	for(eff_ordre=0;(eff_ordre+1)<STACK_SIZE;eff_ordre++) // effassement de tous les ordres
@@ -48,7 +48,7 @@ void Erase_Pile(void)
 	nb_ordre=0;
 }
 
-void DePile(void) 
+void Fifo_out(void) 
 {
 	
 	Tab_ordre[etat]->Type=STOP;

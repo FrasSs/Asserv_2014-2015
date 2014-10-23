@@ -4,9 +4,9 @@
 #include "config.h"
 #include "Nombre_ordre_enregistre.h"
 
-void Pile(void); 
-void DePile(void); 
+void Fifo_in(void); 
+void Fifo_out(void); 
 
-void Erase_Pile(void); 
+void Erase_Fifo(void); 
 
 #endif

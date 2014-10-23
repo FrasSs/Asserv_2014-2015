@@ -70,8 +70,6 @@ int BugBloquage=0;
 double moteur_G = 0.0;
 double moteur_D = 0.0;
 
-
-
 //////////////////////////////////////////////////////////////////////////
 // Test et debuging //////////////////////////////////////////////////////
 
@@ -174,6 +172,7 @@ int main(void)
 
 
 #endif
+
 	//////////////////////////////////////////////////////////////////////////
 	// Initialisation ////////////////////////////////////////////////////////
 	
@@ -213,16 +212,15 @@ int main(void)
 					//////////////////////////////////////////////////////////////////////////
 					// Trapeze vitesse avance 
 
-					Vitesse_C_U = 0;//calculTrapez(AVANCE,	Vitesse_C_U,	15,		40.0,		distance_restante,	10.0,		10.0,	&positionnement_precis_U);
-					Vitesse_C_T = calculTrapez(TOURNE,	Vitesse_C_T,	0,		M_PI,		angle_restant,		20.0,		20.0,	&positionnement_precis_T);
-
+					Vitesse_C_U = calculTrapez(AVANCE,Vitesse_C_U,		0,	5,		distance_restante,	2.0,	2.0,	&positionnement_precis_U);
+					Vitesse_C_T = calculTrapez(TOURNE, Vitesse_C_T,		0,	0.115,	angle_restant,		3.0,	3.0,	&positionnement_precis_T);
 					
 					//////////////////////////////////////////////////////////////////////////
 					// Asservi PID
 					// assignation aux variables des moteurs d'une nouvelle commande
 					
-					PID_V_U= fct_PI(AVANCE,	Ki_U,	1.0,	Kp_U,	Vitesse_C_U-distance_U,		0.01);
-					PID_V_T= fct_PI(TOURNE,	Ki_T,	1.0,	Kp_T,	Vitesse_C_T-distance_Theta,	0.01);
+					PID_V_U= 6.6 * fct_PI(AVANCE,	Ki_U,	1.0,	Kp_U,	Vitesse_C_U-distance_U,		0.01);
+					PID_V_T= 8.7 * fct_PI(TOURNE,	Ki_T,	1.0,	Kp_T,	Vitesse_C_T-distance_Theta,	0.01);
 					
 					//////////////////////////////////////////////////////////////////////////
 					// assignation aux variables des moteurs d'une nouvelle commande
@@ -298,7 +296,6 @@ int main(void)
 				}
 				
 // >>> STOP		
-				//Par I2C	
 				case STOP :
 				{
 					position.Type=STOP;
@@ -353,40 +350,38 @@ int main(void)
 
 		//////////////////////////////////////////////////////////////////////////
 		
-		
-			//Releve des roues codeuses
-			#if (SIMU==Test_codeuse)
+		//Releve des roues codeuses
+		#if (SIMU==Test_codeuse)
 			
-			tot_codeur_D=tot_codeur_D+Sens_codeur_D*(codeur_d - 10000);
-			tot_codeur_G=tot_codeur_G+Sens_codeur_G*(codeur_g - 10000);
+		tot_codeur_D=tot_codeur_D+Sens_codeur_D*(codeur_d - 10000);
+		tot_codeur_G=tot_codeur_G+Sens_codeur_G*(codeur_g - 10000);
 
 
-			if(tot_codeur_D>=20000)
-			{
-				tot_codeur_D-=20000;
-				tot_codeur_D_2++;
-			}
-			if(tot_codeur_D<=-20000)
-			{
-				tot_codeur_D+=20000;
-				tot_codeur_D_2--;
-			}
+		if(tot_codeur_D>=20000)
+		{
+			tot_codeur_D-=20000;
+			tot_codeur_D_2++;
+		}
+		if(tot_codeur_D<=-20000)
+		{
+			tot_codeur_D+=20000;
+			tot_codeur_D_2--;
+		}
 
 
-			if(tot_codeur_G>=20000)
-			{
-				tot_codeur_G-=20000;
-				tot_codeur_G_2++;
-			}
-			if(tot_codeur_G<=-20000)
-			{
-				tot_codeur_G+=20000;
+		if(tot_codeur_G>=20000)
+		{
+			tot_codeur_G-=20000;
+			tot_codeur_G_2++;
+		}
+		if(tot_codeur_G<=-20000)
+		{
+			tot_codeur_G+=20000;
 
-				tot_codeur_G_2--;
-			}
+			tot_codeur_G_2--;
+		}
 
-			#endif
-		
+		#endif
 		
 	} // end while(1)
 	

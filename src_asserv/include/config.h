@@ -31,7 +31,7 @@
 	#include "Odometrie.h"
 #include "Ordres.h"
 	#include "PI_Asservissement.h"
-	#include "Pile.h"
+	#include "Fifo.h"
 	#include "Ralentissement_free.h"
 #include "STOP_Force.h"
 #include "traitementI2C.h"
@@ -49,11 +49,11 @@
 #define Sens_codeur_G	1
 
 //PI
-#define Ki_U (double)0.0//0.2
-#define Kp_U (double)1.0//0.8
+#define Ki_U 0//0.2
+#define Kp_U 1//0.8
 
-#define Ki_T (double)5.0//0.005
-#define Kp_T (double)0.5
+#define Ki_T 0.005//0.4
+#define Kp_T 1.2
 
 //Commande moteur
 #define Sens_mot_D -1

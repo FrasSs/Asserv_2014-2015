@@ -17,11 +17,11 @@
     <RootNamespace>asserv_2012_2013</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
     <avrtoolinterface>PDI</avrtoolinterface>
-    <avrtool>com.atmel.avrdbg.tool.simulator</avrtool>
+    <avrtool>com.atmel.avrdbg.tool.avrdragon</avrtool>
     <com_atmel_avrdbg_tool_avrdragon>
       <ToolType>com.atmel.avrdbg.tool.avrdragon</ToolType>
       <ToolName>AVR Dragon</ToolName>
-      <ToolNumber>00A200045196</ToolNumber>
+      <ToolNumber>00A200042294</ToolNumber>
       <Channel>
         <host>127.0.0.1</host>
         <port>57991</port>
@@ -291,7 +291,7 @@
     <Compile Include="include\Ordres.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="include\Pile.h">
+    <Compile Include="include\Fifo.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="include\PI_Asservissement.h">
@@ -339,7 +339,7 @@
     <Compile Include="src\Ordres.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\Pile.c">
+    <Compile Include="src\Fifo.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\PI_Asservissement.c">
