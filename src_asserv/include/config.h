@@ -90,15 +90,17 @@
 // Ordre
 
 // Ce sont les différents états du robot
-#define STOP_F		0x20
-#define AVANCE      0x10
-#define TOURNE      0x15
-#define STOP		0x21
-#define POSITION_W	0x13
-#define AVANCE_Free	0x06
-#define POSITION_R	0x17
-#define BLOQUE		0x38
-#define STATUS_ROB	0x01
+#define STOP_F		1
+#define AVANCE      2
+#define TOURNE      3
+#define STOP		4
+#define POSITION_W	5
+#define AVANCE_Free	6
+#define POSITION_R	7
+#define BLOQUE		8
+#define CERCLE		9
+
+#define STATUS_ROB	80
 
 #define ORDRE_RECU_MAIS_PAS_ENCORE_TRAITE	20 //pour i2c
 
@@ -109,6 +111,7 @@
 #define Rien 0
 #define Brute_force 1
 #define Test_codeuse 2
+#define Commande_mot 3
 
 //////////////////////////////////////////////////////////////////////////
 // Pile

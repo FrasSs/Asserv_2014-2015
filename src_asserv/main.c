@@ -67,6 +67,7 @@ double PID_V_T=0.0;
 int BugBloquage=0;
 
 // Moteur
+double correction_carac_mot = 1.5;
 double moteur_G = 0.0;
 double moteur_D = 0.0;
 
@@ -169,7 +170,6 @@ int main(void)
 		new_etat=4;
 		*/
 	#endif	
-
 
 #endif
 
@@ -295,6 +295,45 @@ int main(void)
 					break;
 				}
 				
+				
+// CERLCE
+				case CERCLE :
+				{
+					position.Type=TOURNE;
+					//////////////////////////////////////////////////////////////////////////
+					// Trapa¨ze vitesse angulaire
+	
+					Calcule_deplacement(TOURNE); // conversion position cartesienne en polaire erreur_U la distance et commande_Theta la distance
+	
+					Vitesse_C_U = calculTrapez(AVANCE,	Vitesse_C_U,	0.0/*V_Min*/,	15.0/*V_Max mm/10ms */,		distance_restante,	2.0/*A_Desc mm/(10ms)Â² */,	2.0/*A_Acc mm/(10ms)Â² */,	&positionnement_precis_U);
+					
+					double X_Bp=(Ordre_actuel.X)-position.X;
+					double Y_Bp=(Ordre_actuel.Y)-position.Y;
+					double Rayon=sqrt((X_Bp)*(X_Bp) + (Y_Bp)*(Y_Bp) );
+					double A=(Rayon-((ANTRAXE_D+ANTRAXE_G)/2.0))/(ANTRAXE_D+ANTRAXE_G);
+					
+					double delta=4.0*Vitesse_C_U*Vitesse_C_U+16.0*A;
+					double x1=(-2.0*Vitesse_C_U-sqrtf(delta))/8;
+					double x2=(-2.0*Vitesse_C_U+sqrtf(delta))/8;
+					
+					Vitesse_C_T=(Vitesse_C_U-x1)*(Vitesse_C_U-x2);
+					
+					//////////////////////////////////////////////////////////////////////////
+					/// Asservi PID
+					// assignation aux variables des moteurs d'une nouvelle commande
+	
+					PID_V_U= fct_PI(AVANCE,	Ki_U,	1 ,	Kp_U,	Vitesse_C_U-distance_U,		0.01);
+					PID_V_T= fct_PI(TOURNE,	Ki_T,	1,	Kp_T,	Vitesse_C_T-distance_Theta,	0.01);
+	
+					//////////////////////////////////////////////////////////////////////////
+					// assignation aux variables des moteurs d'une nouvelle commande
+	
+					moteur_G = PID_V_U - PID_V_T ;
+					moteur_D = PID_V_U + PID_V_T ;
+	
+					break;
+				}
+				
 // >>> STOP		
 				case STOP :
 				{
@@ -343,6 +382,14 @@ int main(void)
 		
 		//////////////////////////////////////////////////////////////////////////
 		// MOTEUR ////////////////////////////////////////////////////////////////
+		
+		#if (SIMU==Commande_mot)
+			
+			moteur_D=30;
+			moteur_G=30;
+			
+		#endif
+		
 		// Mise a  jour des registres des pwm commandant les moteurs
 
 		pwm_set(cablage_mot_D,Sens_mot_D*moteur_D); // attention moteur gauche inversé

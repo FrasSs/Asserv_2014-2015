@@ -177,6 +177,32 @@ void Calcule_deplacement(int action)
 			break;
 			//////////////////////////////////////////////////////////////////////////
 		}	
+		
+		
+		case CERCLE:
+		{
+					
+			//////////////////////////////////////////////////////////////////////////
+			// critères des zones d'arrivées /////////////////////////////////////////
+
+			if(fabs(distance_restante)<5) // arrèt des moteurs quand le robot est à la position x et y demandée
+			{
+				positionnement_precis_U= 1;
+				positionnement_precis_T= 1;
+			}
+			else
+			{
+				positionnement_precis_U= 0;
+				positionnement_precis_T= 0;
+			}
+
+			break;
+			//////////////////////////////////////////////////////////////////////////
+		}
+		
+		
+		
+		
 #endif		
 		default:
 			break;
